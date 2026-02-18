@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Admin Panel â Cevher SarÄ±yÄ±ldÄ±z</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --surface2: #222;
+  --border: #333;
+  --text: #e5e5e5;
+  --text2: #999;
+  --accent: #ff4d00;
+  --accent-hover: #ff6b2b;
+  --green: #22c55e;
+  --blue: #3b82f6;
+  --red: #ef4444;
+  --radius: 8px;
+}
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* LAYOUT */
+.app { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 260px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 1.5rem 0;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+  z-index: 10;
+}
+.main {
+  margin-left: 260px;
+  flex: 1;
+  padding: 2rem 3rem;
+  max-width: 900px;
+}
+
+/* SIDEBAR */
+.sidebar-logo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 0 1.5rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--accent);
+}
+.sidebar-logo span { color: var(--text2); font-weight: 400; font-size: 0.75rem; display: block; margin-top: 0.25rem; }
+.nav-section { padding: 1rem 0; }
+.nav-section-title {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text2);
+  padding: 0 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1.5rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text2);
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(255,77,0,0.05); }
+.nav-item .icon { font-size: 1rem; width: 20px; text-align: center; }
+
+/* SECTIONS */
+.section { display: none; }
+.section.active { display: block; }
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.section-desc {
+  color: var(--text2);
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+}
+
+/* FORM ELEMENTS */
+.form-group { margin-bottom: 1.5rem; }
+.form-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+.form-input, .form-textarea, .form-select {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.form-textarea { resize: vertical; min-height: 100px; }
+.form-hint { font-size: 0.75rem; color: var(--text2); margin-top: 0.3rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+/* CARDS */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.card-title { font-weight: 600; font-size: 1rem; }
+.card-number { font-size: 0.75rem; color: var(--accent); font-weight: 600; }
+.card-actions { display: flex; gap: 0.5rem; }
+
+/* BUTTONS */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--border); }
+.btn-danger { background: transparent; color: var(--red); border: 1px solid var(--red); }
+.btn-danger:hover { background: rgba(239,68,68,0.1); }
+.btn-success { background: var(--green); color: #fff; }
+.btn-success:hover { opacity: 0.9; }
+.btn-lg { padding: 0.75rem 2rem; font-size: 0.9rem; }
+
+/* COLOR PICKER ROW */
+.color-row { display: flex; gap: 0.75rem; align-items: center; }
+.color-row input[type="color"] {
+  width: 40px; height: 40px; border: none; border-radius: var(--radius);
+  cursor: pointer; background: none; padding: 0;
+}
+.color-row .form-input { flex: 1; }
+
+/* PREVIEW BAR */
+.preview-bar {
+  position: fixed;
+  bottom: 0;
+  left: 260px;
+  right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 1rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+}
+.preview-bar .status { font-size: 0.8rem; color: var(--text2); }
+.preview-bar .status .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.5rem; vertical-align: middle; }
+.preview-bar .status .dot.saved { background: var(--green); }
+.preview-bar .status .dot.unsaved { background: var(--red); }
+
+/* CAMPAIGN CARD */
+.campaign-mini {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface2);
+  border-radius: var(--radius);
+  margin-bottom: 0.5rem;
+}
+.campaign-mini .swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.campaign-mini .info { flex: 1; }
+.campaign-mini .info .name { font-size: 0.85rem; font-weight: 500; }
+.campaign-mini .info .sub { font-size: 0.7rem; color: var(--text2); }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  right: 2rem;
+  background: var(--green);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 500;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 999;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .sidebar { width: 100%; position: relative; }
+  .main { margin-left: 0; padding: 1.5rem; }
+  .preview-bar { left: 0; }
+  .app { flex-direction: column; }
+  .form-row { grid-template-columns: 1fr; }
+}
+
+/* SPACER */
+.spacer { height: 80px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    CS. Admin Panel
+    <span>Portfolio Content Manager</span>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Genel</div>
+    <div class="nav-item active" data-section="general"><span class="icon">â</span> Genel Bilgiler</div>
+    <div class="nav-item" data-section="hero"><span class="icon">ð </span> Hero / Ana Sayfa</div>
+    <div class="nav-item" data-section="about"><span class="icon">ð¤</span> HakkÄ±mda</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Projeler</div>
+    <div class="nav-item" data-section="projects"><span class="icon">ð¼</span> Ana Projeler (5)</div>
+    <div class="nav-item" data-section="campaigns"><span class="icon">ð±</span> Kampanyalar (6)</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Alt BÃ¶lÃ¼mler</div>
+    <div class="nav-item" data-section="services"><span class="icon">ð§</span> Hizmetler</div>
+    <div class="nav-item" data-section="clients"><span class="icon">ð¤</span> MÃ¼Återiler</div>
+    <div class="nav-item" data-section="contact"><span class="icon">ð§</span> Ä°letiÅim</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Tema</div>
+    <div class="nav-item" data-section="theme"><span class="icon">ð¨</span> Renkler & Fontlar</div>
+  </div>
+
+  <div class="nav-section" style="border-top:1px solid var(--border);padding-top:1rem;margin-top:0.5rem;">
+    <div class="nav-item" data-section="export" style="color:var(--green);font-weight:600;"><span class="icon">ð¦</span> DÄ±Åa Aktar / Kaydet</div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- GENERAL -->
+  <div class="section active" id="sec-general">
+    <h2 class="section-title">Genel Bilgiler</h2>
+    <p class="section-desc">Portfolio sitesinin temel kiÅisel bilgileri</p>
+    <div class="form-group">
+      <label class="form-label">Ad Soyad</label>
+      <input class="form-input" id="gen-name" value="Cevher SarÄ±yÄ±ldÄ±z" placeholder="Ad Soyad">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Unvan / Meslek</label>
+      <input class="form-input" id="gen-title" value="Graphic Designer & Art Director" placeholder="Graphic Designer & Art Director">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">E-posta</label>
+        <input class="form-input" id="gen-email" value="cvhrsryldz96@gmail.com" type="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Lokasyon</label>
+        <input class="form-input" id="gen-location" value="Turkey" placeholder="Istanbul, Turkey">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">GitHub URL</label>
+        <input class="form-input" id="gen-github" value="https://github.com/cvhrsryldz">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Behance URL</label>
+        <input class="form-input" id="gen-behance" value="" placeholder="https://behance.net/...">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Instagram URL</label>
+        <input class="form-input" id="gen-instagram" value="" placeholder="https://instagram.com/...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">LinkedIn URL</label>
+        <input class="form-input" id="gen-linkedin" value="" placeholder="https://linkedin.com/in/...">
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="section" id="sec-hero">
+    <h2 class="section-title">Hero / Ana Sayfa</h2>
+    <p class="section-desc">SayfanÄ±n ilk gÃ¶rÃ¼nen kÄ±smÄ± â isim, alt baÅlÄ±k ve kÄ±sa bilgiler</p>
+    <div class="form-group">
+      <label class="form-label">Hero Ä°sim (1. SatÄ±r)</label>
+      <input class="form-input" id="hero-line1" value="Cevher" placeholder="Cevher">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Hero Soyisim (2. SatÄ±r â Stroke Efekti)</label>
+      <input class="form-input" id="hero-line2" value="SarÄ±yÄ±ldÄ±z" placeholder="SarÄ±yÄ±ldÄ±z">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Alt BaÅlÄ±k</label>
+      <input class="form-input" id="hero-subtitle" value="Graphic Design & Art Direction" placeholder="Graphic Design & Art Direction">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Hero Bilgi Metni (3 satÄ±r)</label>
+      <textarea class="form-textarea" id="hero-info" rows="3" placeholder="Based in Turkey&#10;Available for Freelance&#10;Crafting visual identities since 2018">Based in Turkey
+Available for Freelance
+Crafting visual identities since 2018</textarea>
+      <div class="form-hint">Her satÄ±r ayrÄ± bir satÄ±rda gÃ¶sterilir</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Arka Plan BÃ¼yÃ¼k YazÄ±</label>
+      <input class="form-input" id="hero-bgtext" value="DESIGN" placeholder="DESIGN">
+      <div class="form-hint">Hero arka planÄ±nda Åeffaf olarak dÃ¶nen bÃ¼yÃ¼k yazÄ±</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Marquee Bant Ä°Ã§eriÄi</label>
+      <textarea class="form-textarea" id="hero-marquee" rows="2" placeholder="Brand Identity, Packaging Design, Art Direction...">Brand Identity, Packaging Design, Art Direction, Social Media, Visual Systems, Typography, Advertising</textarea>
+      <div class="form-hint">VirgÃ¼lle ayÄ±rÄ±n â otomatik kayan bant olarak gÃ¶sterilir</div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="section" id="sec-about">
+    <h2 class="section-title">HakkÄ±mda</h2>
+    <p class="section-desc">About bÃ¶lÃ¼mÃ¼ndeki metinler ve istatistikler</p>
+    <div class="form-group">
+      <label class="form-label">BÃ¼yÃ¼k AlÄ±ntÄ± / Slogan</label>
+      <textarea class="form-textarea" id="about-quote" rows="3">I transform brands into living systems â from pixel to billboard, from screen to street.</textarea>
+      <div class="form-hint">Vurgulu kelimeyi ** ile sarÄ±n: **living systems**</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Paragraf 1</label>
+      <textarea class="form-textarea" id="about-p1" rows="3">I'm Cevher SarÄ±yÄ±ldÄ±z, a graphic designer and art director based in Turkey. My work spans the full spectrum of visual communication â brand identities, environmental graphics, packaging, digital campaigns, and advertising design.</textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Paragraf 2</label>
+      <textarea class="form-textarea" id="about-p2" rows="3">I've had the privilege of working with major clients including Turkish Technic (Turkish Airlines Group), Konya Metropolitan Municipality, and international digital platforms. Each project is an opportunity to build visual systems that are both conceptually sharp and aesthetically bold.</textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Paragraf 3</label>
+      <textarea class="form-textarea" id="about-p3" rows="3">Whether it's crafting a geometric logomark for a robotics company or designing a match-day poster for a sports platform, I approach every brief with the same obsessive attention to detail and strategic thinking.</textarea>
+    </div>
+    <h3 style="margin:2rem 0 1rem;font-size:1rem;">Ä°statistikler</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Stat 1 â SayÄ±</label>
+        <input class="form-input" id="stat1-num" value="50+" placeholder="50+">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Stat 1 â Etiket</label>
+        <input class="form-input" id="stat1-label" value="Projects" placeholder="Projects">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Stat 2 â SayÄ±</label>
+        <input class="form-input" id="stat2-num" value="30+" placeholder="30+">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Stat 2 â Etiket</label>
+        <input class="form-input" id="stat2-label" value="Clients" placeholder="Clients">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Stat 3 â SayÄ±</label>
+        <input class="form-input" id="stat3-num" value="6+" placeholder="6+">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Stat 3 â Etiket</label>
+        <input class="form-input" id="stat3-label" value="Years Exp." placeholder="Years Exp.">
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="section" id="sec-projects">
+    <h2 class="section-title">Ana Projeler</h2>
+    <p class="section-desc">Portfolio'daki ana proje kartlarÄ±. Her biri bir gradient arka plan, baÅlÄ±k ve aÃ§Ä±klama iÃ§erir.</p>
+
+    <div id="projects-list"></div>
+
+    <button class="btn btn-secondary" onclick="addProject()" style="margin-top:1rem;">+ Yeni Proje Ekle</button>
+  </div>
+
+  <!-- CAMPAIGNS -->
+  <div class="section" id="sec-campaigns">
+    <h2 class="section-title">Kampanyalar (Horizontal Gallery)</h2>
+    <p class="section-desc">Yatay scroll galerisindeki sosyal medya ve kampanya kartlarÄ±</p>
+
+    <div id="campaigns-list"></div>
+
+    <button class="btn btn-secondary" onclick="addCampaign()" style="margin-top:1rem;">+ Yeni Kampanya Ekle</button>
+  </div>
+
+  <!-- SERVICES -->
+  <div class="section" id="sec-services">
+    <h2 class="section-title">Hizmetler</h2>
+    <p class="section-desc">Services bÃ¶lÃ¼mÃ¼ndeki 4 hizmet kartÄ±</p>
+
+    <div id="services-list"></div>
+
+    <button class="btn btn-secondary" onclick="addService()" style="margin-top:1rem;">+ Yeni Hizmet Ekle</button>
+  </div>
+
+  <!-- CLIENTS -->
+  <div class="section" id="sec-clients">
+    <h2 class="section-title">MÃ¼Återiler</h2>
+    <p class="section-desc">Selected Clients bÃ¶lÃ¼mÃ¼ndeki mÃ¼Återi etiketleri</p>
+    <div class="form-group">
+      <label class="form-label">MÃ¼Återi Ä°simleri</label>
+      <textarea class="form-textarea" id="clients-list-input" rows="4" placeholder="Her satÄ±ra bir mÃ¼Återi adÄ± yazÄ±n">Turkish Technic
+Konya Municipality
+Betista.io
+Nesine.com
+RAM Robotics
+YÃ¼kseller
+Yes!WeAble</textarea>
+      <div class="form-hint">Her satÄ±ra bir mÃ¼Återi adÄ± yazÄ±n</div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="section" id="sec-contact">
+    <h2 class="section-title">Ä°letiÅim</h2>
+    <p class="section-desc">Contact bÃ¶lÃ¼mÃ¼ndeki baÅlÄ±k ve linkler</p>
+    <div class="form-group">
+      <label class="form-label">Ãst BaÅlÄ±k</label>
+      <input class="form-input" id="contact-pretitle" value="Let's Create Together">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Ana BaÅlÄ±k (CTA)</label>
+      <input class="form-input" id="contact-title" value="Say hello.">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Footer Sol Metin</label>
+      <input class="form-input" id="footer-left" value="Â© 2026 Cevher SarÄ±yÄ±ldÄ±z">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Footer SaÄ Metin</label>
+      <input class="form-input" id="footer-right" value="Design & Development">
+    </div>
+  </div>
+
+  <!-- THEME -->
+  <div class="section" id="sec-theme">
+    <h2 class="section-title">Renkler & Tema</h2>
+    <p class="section-desc">Sitenin genel renk paletini Ã¶zelleÅtirin</p>
+    <div class="form-group">
+      <label class="form-label">Ana Vurgu Rengi (Accent)</label>
+      <div class="color-row">
+        <input type="color" id="theme-accent" value="#ff4d00">
+        <input class="form-input" id="theme-accent-hex" value="#ff4d00" placeholder="#ff4d00">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Ä°kincil Vurgu Rengi</label>
+      <div class="color-row">
+        <input type="color" id="theme-accent2" value="#6c3ce0">
+        <input class="form-input" id="theme-accent2-hex" value="#6c3ce0">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Arka Plan</label>
+      <div class="color-row">
+        <input type="color" id="theme-bg" value="#0a0a0a">
+        <input class="form-input" id="theme-bg-hex" value="#0a0a0a">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Metin Rengi</label>
+      <div class="color-row">
+        <input type="color" id="theme-text" value="#f5f0eb">
+        <input class="form-input" id="theme-text-hex" value="#f5f0eb">
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPORT -->
+  <div class="section" id="sec-export">
+    <h2 class="section-title">DÄ±Åa Aktar / Kaydet</h2>
+    <p class="section-desc">TÃ¼m deÄiÅiklikleri uygulayÄ±p gÃ¼ncellenmiÅ index.html dosyasÄ±nÄ± indirin</p>
+
+    <div class="card" style="border-color:var(--green);">
+      <h3 style="margin-bottom:1rem;">HTML DosyasÄ± OluÅtur</h3>
+      <p style="color:var(--text2);font-size:0.85rem;margin-bottom:1.5rem;">
+        TÃ¼m bilgileri kontrol ettikten sonra aÅaÄÄ±daki butona basarak gÃ¼ncellenmiÅ <strong>index.html</strong> dosyasÄ±nÄ± indirin.
+        Bu dosyayÄ± GitHub reponuza yÃ¼kleyerek sitenizi gÃ¼ncelleyebilirsiniz.
+      </p>
+      <button class="btn btn-success btn-lg" onclick="generateAndDownload()">
+        ð¦ index.html Ä°ndir
+      </button>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <h3 style="margin-bottom:1rem;">JSON Olarak Kaydet / YÃ¼kle</h3>
+      <p style="color:var(--text2);font-size:0.85rem;margin-bottom:1rem;">
+        Verilerinizi JSON olarak dÄ±Åa aktarÄ±p daha sonra tekrar yÃ¼kleyebilirsiniz.
+      </p>
+      <div style="display:flex;gap:1rem;">
+        <button class="btn btn-secondary" onclick="exportJSON()">ð¾ JSON Kaydet</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('json-upload').click()">ð JSON YÃ¼kle</button>
+        <input type="file" id="json-upload" accept=".json" style="display:none" onchange="importJSON(event)">
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+</main>
+</div>
+
+<!-- PREVIEW BAR -->
+<div class="preview-bar">
+  <div class="status">
+    <span class="dot unsaved" id="status-dot"></span>
+    <span id="status-text">DÃ¼zenlenmemiÅ</span>
+  </div>
+  <div style="display:flex;gap:0.75rem;">
+    <button class="btn btn-secondary" onclick="previewSite()">ð Ãnizle</button>
+    <button class="btn btn-primary" onclick="generateAndDownload()">ð¦ Ä°ndir</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DATA STORE =====
+let projects = [
+  { name: "Konya Metropolitan Municipality", category: "Brand Identity & Environmental Graphics", desc: "Complete visual identity system for one of Turkey's largest metropolitan municipalities. Designed environmental graphics spanning city billboards, transit systems, public buildings and official communications â creating a unified civic brand language across all touchpoints.", logoText: "KONYA\\nBÃ¼yÃ¼kÅehir\\nBelediyesi", gradient: "linear-gradient(135deg,#1a5c3a,#2d8f5e,#3cb371)", tags: "Brand Identity, Environmental" },
+  { name: "Betista.io", category: "Brand Identity & Digital Platform", desc: "Bold visual identity for a Web3 and NFT platform. Developed a dynamic brand system with vibrant color language, geometric logomark combining cube and \"B\" letterform, plus a comprehensive campaign system spanning digital, outdoor advertising and social channels.", logoText: "betista.io\\nCRYPTO Â· NFT Â· WEB3", gradient: "linear-gradient(135deg,#00e676,#6c3ce0,#00bcd4)", tags: "Brand Identity, Web3" },
+  { name: "RAM Robotics", category: "Industrial Brand Identity", desc: "Industrial-grade brand identity for a robotics company. The bold geometric logomark uses negative space to create the \"RAM\" letters. Applied across uniforms, safety equipment, fleet vehicles and full corporate stationery â all anchored in a striking orange and black palette.", logoText: "RAM\\nROBOTICS", gradient: "linear-gradient(135deg,#1a1a1a,#2d2d2d)", tags: "Brand Identity, Industrial" },
+  { name: "YÃ¼kseller", category: "Logistics Brand Identity", desc: "Complete brand identity for a logistics and transport company. The \"Y\" mark cleverly integrates a play button and upward arrow â symbolizing forward momentum. The visual system extends across truck fleet livery, building signage, corporate stationery and digital presence.", logoText: "Y YÃ¼kseller\\nLOGISTICS & TRANSPORT", gradient: "linear-gradient(135deg,#3a5ba0,#4e8cc7,#e8657a)", tags: "Brand Identity, Logistics" },
+  { name: "Yes!WeAble", category: "Creative Agency Branding", desc: "Energetic brand identity for a creative agency built on optimism. Designed a vibrant sticker-based visual language, bold Helvetica typography, and a thumbs-up icon system. The playful yet confident identity spans print collateral, merchandise, social content and physical space design.", logoText: "Yes!WeAble\\nCREATIVE AGENCY", gradient: "linear-gradient(135deg,#0033ff,#1a1aff)", tags: "Brand Identity, Agency" }
+];
+
+let campaigns = [
+  { title: "Turkish Technic â Holiday Series", sub: "Social Media Design", gradient: "linear-gradient(135deg,#c62828,#8b0000)", logoText: "TURKISH TECHNIC\\nHoliday Campaign" },
+  { title: "Turkish Technic â Special Days", sub: "Social Media Design", gradient: "linear-gradient(135deg,#b71c1c,#d32f2f)", logoText: "TURKISH TECHNIC\\nMother's Day & Special Days" },
+  { title: "Nesine.com â Serie A Campaign", sub: "Sports Marketing", gradient: "linear-gradient(135deg,#1a1a1a,#333)", logoText: "NESINE.COM\\nSerie A Match Day" },
+  { title: "Nesine.com â World Cup", sub: "Sports Marketing", gradient: "linear-gradient(135deg,#2e2e2e,#444)", logoText: "NESINE.COM\\nFIFA World Cup 2022" },
+  { title: "Nesine.com â Old Firm", sub: "Sports Marketing", gradient: "linear-gradient(135deg,#0d47a1,#1565c0)", logoText: "NESINE.COM\\nOld Firm Derby" },
+  { title: "Betista.io â Social Campaign", sub: "Digital Advertising", gradient: "linear-gradient(135deg,#00e676,#6c3ce0)", logoText: "BETISTA.IO\\nNFT & Crypto Ads" }
+];
+
+let services = [
+  { name: "Brand Identity", desc: "Logo design, visual systems, brand guidelines, and complete identity packages that give brands a distinct, memorable presence." },
+  { name: "Art Direction", desc: "Creative direction for campaigns, photoshoots, and multi-platform projects â ensuring visual consistency and conceptual clarity." },
+  { name: "Social & Digital", desc: "Social media design, digital advertising, campaign visuals, and content systems built for engagement and brand recognition." },
+  { name: "Environmental", desc: "Signage, wayfinding, billboard design, vehicle wraps, and spatial graphics that bring brands into the physical world." }
+];
+
+// ===== NAVIGATION =====
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    item.classList.add('active');
+    const sec = document.getElementById('sec-' + item.dataset.section);
+    if (sec) sec.classList.add('active');
+  });
+});
+
+// ===== RENDER FUNCTIONS =====
+function renderProjects() {
+  const container = document.getElementById('projects-list');
+  container.innerHTML = projects.map((p, i) => `
+    <div class="card">
+      <div class="card-header">
+        <div><span class="card-number">PROJE ${String(i+1).padStart(2,'0')}</span></div>
+        <div class="card-actions">
+          <button class="btn btn-danger" onclick="removeProject(${i})" style="font-size:0.7rem;padding:0.3rem 0.6rem;">Sil</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Proje AdÄ±</label>
+        <input class="form-input" value="${esc(p.name)}" onchange="projects[${i}].name=this.value;markChanged()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Kategori</label>
+        <input class="form-input" value="${esc(p.category)}" onchange="projects[${i}].category=this.value;markChanged()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">AÃ§Ä±klama</label>
+        <textarea class="form-textarea" rows="3" onchange="projects[${i}].desc=this.value;markChanged()">${esc(p.desc)}</textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Logo/Kart Metni</label>
+          <input class="form-input" value="${esc(p.logoText)}" onchange="projects[${i}].logoText=this.value;markChanged()">
+          <div class="form-hint">\\n ile satÄ±r atlatabilirsiniz</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Etiketler</label>
+          <input class="form-input" value="${esc(p.tags)}" onchange="projects[${i}].tags=this.value;markChanged()">
+          <div class="form-hint">VirgÃ¼lle ayÄ±rÄ±n</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Gradient Arka Plan (CSS)</label>
+        <input class="form-input" value="${esc(p.gradient)}" onchange="projects[${i}].gradient=this.value;markChanged()">
+        <div class="form-hint">Ãrn: linear-gradient(135deg,#00e676,#6c3ce0)</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderCampaigns() {
+  const container = document.getElementById('campaigns-list');
+  container.innerHTML = campaigns.map((c, i) => `
+    <div class="campaign-mini">
+      <div class="swatch" style="background:${c.gradient}"></div>
+      <div class="info">
+        <div class="name">${esc(c.title)}</div>
+        <div class="sub">${esc(c.sub)}</div>
+      </div>
+      <button class="btn btn-secondary" style="font-size:0.7rem;padding:0.3rem 0.6rem;" onclick="editCampaign(${i})">DÃ¼zenle</button>
+      <button class="btn btn-danger" style="font-size:0.7rem;padding:0.3rem 0.6rem;" onclick="removeCampaign(${i})">Sil</button>
+    </div>
+  `).join('');
+}
+
+function renderServices() {
+  const container = document.getElementById('services-list');
+  container.innerHTML = services.map((s, i) => `
+    <div class="card">
+      <div class="card-header">
+        <span class="card-number">${String(i+1).padStart(2,'0')}</span>
+        <button class="btn btn-danger" onclick="removeService(${i})" style="font-size:0.7rem;padding:0.3rem 0.6rem;">Sil</button>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Hizmet AdÄ±</label>
+          <input class="form-input" value="${esc(s.name)}" onchange="services[${i}].name=this.value;markChanged()">
+        </div>
+        <div class="form-group">
+          <label class="form-label">AÃ§Ä±klama</label>
+          <textarea class="form-textarea" rows="2" onchange="services[${i}].desc=this.value;markChanged()">${esc(s.desc)}</textarea>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== ADD / REMOVE =====
+function addProject() {
+  projects.push({ name: "New Project", category: "Category", desc: "Description...", logoText: "LOGO TEXT", gradient: "linear-gradient(135deg,#333,#555)", tags: "Tag1, Tag2" });
+  renderProjects(); markChanged();
+}
+function removeProject(i) { if(confirm('Bu projeyi silmek istediÄinize emin misiniz?')) { projects.splice(i,1); renderProjects(); markChanged(); } }
+
+function addCampaign() {
+  const t = prompt('Kampanya adÄ±:');
+  if(t) { campaigns.push({ title: t, sub: "Social Media", gradient: "linear-gradient(135deg,#333,#555)", logoText: t }); renderCampaigns(); markChanged(); }
+}
+function removeCampaign(i) { if(confirm('Silmek istediÄinize emin misiniz?')) { campaigns.splice(i,1); renderCampaigns(); markChanged(); } }
+function editCampaign(i) {
+  const c = campaigns[i];
+  const title = prompt('BaÅlÄ±k:', c.title); if(title) c.title = title;
+  const sub = prompt('Alt baÅlÄ±k:', c.sub); if(sub) c.sub = sub;
+  const grad = prompt('Gradient CSS:', c.gradient); if(grad) c.gradient = grad;
+  const logo = prompt('Logo metni:', c.logoText); if(logo) c.logoText = logo;
+  renderCampaigns(); markChanged();
+}
+
+function addService() {
+  services.push({ name: "New Service", desc: "Description..." });
+  renderServices(); markChanged();
+}
+function removeService(i) { if(confirm('Silmek istediÄinize emin misiniz?')) { services.splice(i,1); renderServices(); markChanged(); } }
+
+// ===== UTILS =====
+function esc(str) { return String(str||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function markChanged() {
+  document.getElementById('status-dot').className = 'dot unsaved';
+  document.getElementById('status-text').textContent = 'KaydedilmemiÅ deÄiÅiklikler';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ===== COLOR SYNC =====
+['accent','accent2','bg','text'].forEach(key => {
+  const picker = document.getElementById('theme-' + key);
+  const hex = document.getElementById('theme-' + key + '-hex');
+  if(picker && hex) {
+    picker.addEventListener('input', () => { hex.value = picker.value; markChanged(); });
+    hex.addEventListener('input', () => { picker.value = hex.value; markChanged(); });
+  }
+});
+
+// ===== JSON EXPORT/IMPORT =====
+function getAllData() {
+  return {
+    general: {
+      name: document.getElementById('gen-name').value,
+      title: document.getElementById('gen-title').value,
+      email: document.getElementById('gen-email').value,
+      location: document.getElementById('gen-location').value,
+      github: document.getElementById('gen-github').value,
+      behance: document.getElementById('gen-behance').value,
+      instagram: document.getElementById('gen-instagram').value,
+      linkedin: document.getElementById('gen-linkedin').value,
+    },
+    hero: {
+      line1: document.getElementById('hero-line1').value,
+     line2: document.getElementById('hero-line2').value,
+      subtitle: document.getElementById('hero-subtitle').value,
+      info: document.getElementById('hero-info').value,
+      bgtext: document.getElementById('hero-bgtext').value,
+      marquee: document.getElementById('hero-marquee').value,
+    },
+    about: {
+      quote: document.getElementById('about-quote').value,
+      p1: document.getElementById('about-p1').value,
+      p2: document.getElementById('about-p2').value,
+      p3: document.getElementById('about-p3').value,
+      stats: [
+        { num: document.getElementById('stat1-num').value, label: document.getElementById('stat1-label').value },
+        { num: document.getElementById('stat2-num').value, label: document.getElementById('stat2-label').value },
+        { num: document.getElementById('stat3-num').value, label: document.getElementById('stat3-label').value },
+      ]
+    },
+    projects: projects,
+    campaigns: campaigns,
+    services: services,
+    clients: document.getElementById('clients-list-input').value,
+    contact: {
+      pretitle: document.getElementById('contact-pretitle').value,
+      title: document.getElementById('contact-title').value,
+      footerLeft: document.getElementById('footer-left').value,
+      footerRight: document.getElementById('footer-right').value,
+    },
+    theme: {
+      accent: document.getElementById('theme-accent-hex').value,
+      accent2: document.getElementById('theme-accent2-hex').value,
+      bg: document.getElementById('theme-bg-hex').value,
+      text: document.getElementById('theme-text-hex').value,
+    }
+  };
+}
+
+function exportJSON() {
+  const data = getAllData();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'portfolio-data.json';
+  a.click();
+  showToast('JSON dosyasÄ± indirildi!');
+}
+
+function importJSON(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      // Populate fields
+      if(data.general) {
+        document.getElementById('gen-name').value = data.general.name || '';
+        document.getElementById('gen-title').value = data.general.title || '';
+        document.getElementById('gen-email').value = data.general.email || '';
+        document.getElementById('gen-location').value = data.general.location || '';
+        document.getElementById('gen-github').value = data.general.github || '';
+        document.getElementById('gen-behance').value = data.general.behance || '';
+        document.getElementById('gen-instagram').value = data.general.instagram || '';
+        document.getElementById('gen-linkedin').value = data.general.linkedin || '';
+      }
+      if(data.hero) {
+        document.getElementById('hero-line1').value = data.hero.line1 || '';
+        document.getElementById('hero-line2').value = data.hero.line2 || '';
+        document.getElementById('hero-subtitle').value = data.hero.subtitle || '';
+        document.getElementById('hero-info').value = data.hero.info || '';
+        document.getElementById('hero-bgtext').value = data.hero.bgtext || '';
+        document.getElementById('hero-marquee').value = data.hero.marquee || '';
+      }
+      if(data.about) {
+        document.getElementById('about-quote').value = data.about.quote || '';
+        document.getElementById('about-p1').value = data.about.p1 || '';
+        document.getElementById('about-p2').value = data.about.p2 || '';
+        document.getElementById('about-p3').value = data.about.p3 || '';
+        if(data.about.stats && data.about.stats.length >= 3) {
+          document.getElementById('stat1-num').value = data.about.stats[0].num;
+          document.getElementById('stat1-label').value = data.about.stats[0].label;
+          document.getElementById('stat2-num').value = data.about.stats[1].num;
+          document.getElementById('stat2-label').value = data.about.stats[1].label;
+          document.getElementById('stat3-num').value = data.about.stats[2].num;
+          document.getElementById('stat3-label').value = data.about.stats[2].label;
+        }
+      }
+      if(data.projects) { projects = data.projects; renderProjects(); }
+      if(data.campaigns) { campaigns = data.campaigns; renderCampaigns(); }
+      if(data.services) { services = data.services; renderServices(); }
+      if(data.clients) document.getElementById('clients-list-input').value = data.clients;
+      if(data.contact) {
+        document.getElementById('contact-pretitle').value = data.contact.pretitle || '';
+        document.getElementById('contact-title').value = data.contact.title || '';
+        document.getElementById('footer-left').value = data.contact.footerLeft || '';
+        document.getElementById('footer-right').value = data.contact.footerRight || '';
+      }
+      if(data.theme) {
+        document.getElementById('theme-accent-hex').value = data.theme.accent;
+        document.getElementById('theme-accent').value = data.theme.accent;
+        document.getElementById('theme-accent2-hex').value = data.theme.accent2;
+        document.getElementById('theme-accent2').value = data.theme.accent2;
+        document.getElementById('theme-bg-hex').value = data.theme.bg;
+        document.getElementById('theme-bg').value = data.theme.bg;
+        document.getElementById('theme-text-hex').value = data.theme.text;
+        document.getElementById('theme-text').value = data.theme.text;
+      }
+      showToast('JSON baÅarÄ±yla yÃ¼klendi!');
+      markChanged();
+    } catch(err) {
+      alert('JSON dosyasÄ± okunamadÄ±: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ===== GENERATE HTML =====
+function generateAndDownload() {
+  const d = getAllData();
+  const g = d.general;
+  const h = d.hero;
+  const a = d.about;
+  const t = d.theme;
+  const heroInfoLines = h.info.split('\\n').map(l=>l.trim()).filter(Boolean).join('<br>');
+  const marqueeItems = h.marquee.split(',').map(s=>s.trim()).filter(Boolean);
+  const marqueeHTML = marqueeItems.map(s=>`${s} <span class="dot"></span>`).join(' ');
+  const clientsArr = d.clients.split('\\n').map(s=>s.trim()).filter(Boolean);
+
+  // Quote highlight
+  let quoteHTML = a.quote.replace(/\*\*(.*?)\*\*/g, '<span class="highlight">$1</span>');
+
+  // Build projects HTML
+  let projHTML = '';
+  d.projects.forEach((p, i) => {
+    const tagsHTML = p.tags.split(',').map(t=>`<span>${t.trim()}</span>`).join(''
+NÂÛÛÝÙÛÓ[\ÈHÙÛÕ^Ü]
+	×ÊKÚ[	ÏÊNÂÚS
+ÏH]Û\ÜÏHÚXÝZ][H]Û\ÜÏHÚXÝ]\ÝX[]Û\ÜÏHÛÛÜXØÚÈÝ[OHXÚÙÜÝ[ÜÜYY[H]Û\ÜÏHÚXÝ[ÙÛÈÝ[OHÛÛÜÙÛÙÛÓ[\ßOÙ]Ù]]Û\ÜÏHÚXÝ]YÜË[Ý\^HÝYÜÒSOÙ]Ù]]Û\ÜÏHÚXÝZ[È]Û\ÜÏHÚXÝ[[X\ÔÝ[ÊJÌJKYÝ\
+	Ì	Ê_OÙ]ÈÛ\ÜÏHÚXÝ[[YHÜ[Y_OÚÏ]Û\ÜÏHÚXÝXØ]YÛÜHÜØ]YÛÜ_OÙ]Û\ÜÏHÚXÝY\ØÈÜ\ØßOÜÙ]Ù]ÂJNÂËÈZ[Ø[\ZYÛÈS]Ø[\SH	ÉÎÂØ[\ZYÛËÜXXÚ
+ÈOÂÛÛÝÙÛÓ[\ÈHËÙÛÕ^Ü]
+	×ÊKÚ[	ÏÊNÂØ[\S
+ÏH]Û\ÜÏHØÜÛXØ\]Û\ÜÏHØ\]\ÝX[]Û\ÜÏHÛÛÜXØÚÈÝ[OHXÚÙÜÝ[ØËÜYY[H]Û\ÜÏHÚXÝ[ÙÛÈÝ[OHÛÛÜÙÙÛ\Ú^NK\[HÛÙÛÓ[\ßOÙ]Ù]Ù]]Û\ÜÏHØ\]]HØË]_OÙ]]Û\ÜÏHØ\\ÝXØËÝXOÙ]Ù]ÂJNÂËÈZ[Ù\XÙ\ÈS]ÝÒSH	ÉÎÂÙ\XÙ\ËÜXXÚ
+
+ËJHOÂÝÒS
+ÏH]Û\ÜÏHÙ\XÙKXØ\]X[	ÚOÉÈ]X[Y[^KIÊÚNÉßH]Û\ÜÏHÙ\XÙK[[X\ÔÝ[ÊJÌJKYÝ\
+	Ì	Ê_OÙ]]Û\ÜÏHÙ\XÙK[[YHÜË[Y_OÙ]]Û\ÜÏHÙ\XÙKY\ØÈÜË\ØßOÙ]Ù]ÂJNÂËÈÛY[ÂÛÛÝÛY[ÒSHÛY[Ð\X\
+ÈOÜ[ØßOÜÜ[
+KÚ[	ÉÊNÂËÈÛØÚX[[ÜÂ][ÜÒSHHYHXZ[ÎÙË[XZ[H[XZ[ØOÂYËÚ]XH[ÜÒS
+ÏHHYHÙËÚ]XH\Ù]HØ[È[HÛÜ[\Ú]XØOÂYËZ[ÙJH[ÜÒS
+ÏHHYHÙËZ[Ù_H\Ù]HØ[È[HÛÜ[\Z[ÙOØOÂYË[ÝYÜ[JH[ÜÒS
+ÏHHYHÙË[ÝYÜ[_H\Ù]HØ[È[HÛÜ[\[ÝYÜ[OØOÂYË[ÙY[H[ÜÒS
+ÏHHYHÙË[ÙY[H\Ù]HØ[È[HÛÜ[\[ÙY[ØOÂËÈÝ]ÂÛÛÝÝ]ÒSHKÝ]ËX\
+ÈO]Û\ÜÏHÝ]Z][H]Û\ÜÏHÝ][[X\ÜË[_OÙ]]Û\ÜÏHÝ][X[ÜËX[OÙ]Ù]
+KÚ[	ÉÊNÂÛÛÝ[SHZ[[S
+ËK\Ò[Ó[\ËX\]YYRS][ÝRSÚSØ[\SÝÒSÛY[ÒS[ÜÒSÝ]ÒSÛÛXÝ
+NÂÛÛÝØH]ÈØÙ[SKÈ\N	Ý^Ú[	ÈJNÂÛÛÝ[ÈHØÝ[Y[ÜX]Q[[Y[
+	ØIÊNÂ[ËYHTÜX]SØXÝT
+ØNÂ[ËÝÛØYH	Ú[^[	ÎÂ[ËÛXÚÊ
+NÂØÝ[Y[Ù][[Y[RY
+	ÜÝ]\ËYÝ	ÊKÛ\ÜÓ[YHH	ÙÝØ]Y	ÎÂØÝ[Y[Ù][[Y[RY
+	ÜÝ]\Ë]^	ÊK^ÛÛ[H	Ú[^[[\[HIÎÂÚÝÕØ\Ý
+	Ú[^[qgØ\±,^[HÛqgÝ\[HIÊNÂB[Ý[ÛZ[[S
+ËK\Ò[ËX\]YYK][ÝKÚËØ[\ËÝÜËÛY[Ë[ÜËÝ]ËÛÛXÝ
+HÂËÈ\È]\ÈHÛÛ\]HÜÛ[ÈSÚ][HÔÔÈ[Â]\QÐÕTH[[[ÏH[XYY]HÚ\Ù]HUNY]H[YOHY]ÜÜÛÛ[HÚYY]XÙK]ÚY[]X[\ØØ[OLK]OÙË[Y_H8 %	ÙË]_OÝ]O[È[HXÛÛXÝYHÎËÙÛËÛÛÙÛX\\ËÛÛH[È[HXÛÛXÝYHÎËÙÛËÜÝ]XËÛÛHÜÜÜÛÜYÚ[[ÈYHÎËÙÛËÛÛÙÛX\\ËÛÛKØÜÜÌÙ[Z[OTÜXÙJÑÜÝ\ÚÎÙÚÌÍÍLÍÍÌ	[Z[OTÞ[NÙÚ
+ÍLÍÍÌÎ	[Z[OTÜXÙJÓ[ÛÎÙÚ
+ÍÌ	\Ü^O\ÝØ\[HÝ[\ÚY]Ý[O
+YÜK
+Y\ÛX\Ú[ÜY[ÎØÞ\Ú^[ÎÜ\XÞNÛÝËKXXÚÎÝßNËK]Ú]NÝ^NËKXÜX[NÙNLËKXXØÙ[ÝXØÙ[NËKXXØÙ[ÝXØÙ[NËKYÜ^NÎËKYÛY\Ü^NÔÞ[IËØ[Ë\Ù\YËKYÛXÙNÔÜXÙHÜÝ\ÚÉËØ[Ë\Ù\YËKYÛ[[ÛÎÔÜXÙH[ÛÉË[ÛÜÜXÙ_Z[ÜØÜÛXZ][ÜÛ[ÛÝÙÛ\Ú^NMÛÝ\ÝË^Y[XÙ^ØXÚÙÜÝ[\KXXÚÊNØÛÛÜ\K]Ú]JNÙÛY[Z[N\KYÛXÙJNØÝ\ÛÜÛNÛÝ\ÝË^Y[Ë]ÙXÚ]YÛ\Û[ÛÝ[Î[X[X\ÙYX^ØÛÛÜ[\]Ý^YXÛÜ][ÛÛNØÝ\ÛÜÛ_Z[YÞÙ\Ü^NØÚÎÛX^]ÚYL	_KÝ\ÛÜÜÜÚ][Û^YÝÚYLÚZYÚLØXÚÙÜÝ[\KXXØÙ[
+NØÜ\\Y]\ÎL	NÜÚ[\Y][ÎÛNÞZ[^LÛZ^X[[[ÙNY\[ÙNÝ[Ú][Û[ÙÜHM\ÈX\Ù_KÝ\ÛÜYÛÝÙ\ÜÜÚ][Û^YÝÚYÚZYÚØÜ\\ÛÛYØJMK
+ÍËJNØÜ\\Y]\ÎL	NÜÚ[\Y][ÎÛNÞZ[^NNNNÝ[Ú][Û[ÙÜHÜÈX\ÙKÚYÜÈX\ÙKZYÚÜÈX\Ù_KÝ\ÛÜYÛÝÙ\Ý\ÝÚYÚZYÚØÜ\XÛÛÜ\KXXØÙ[
+NØXÚÙÜÝ[ØJMK
+ÍË
+J_KØY\ÜÜÚ][Û^YÚ[Ù]ØXÚÙÜÝ[\KXXÚÊNÞZ[^NNNNNÙ\Ü^N^Ø[YÛZ][\ÎÙ[\Ú\ÝYKXÛÛ[Ù[\Ù^Y\XÝ[ÛÛÛ[[ÙØ\[_KØY\]^ÙÛY[Z[N\KYÛY\Ü^JNÙÛ\Ú^NÛ[\
+[KË
+[JNÙÛ]ÙZYÚÛ]\\ÜXÚ[ÎKÙ[NÛÝ\ÝÎY[KØY\]^Ü[Ù\Ü^N[[KXØÚÎÝ[ÙÜN[Û]VJL	JNØ[[X][ÛØY\]X[ÈÝXXËX^Y\NKKJHÜØ\ßKØY\[[^ÝÚYÚZYÚØXÚÙÜÝ[\KXXØÙ[
+NØ[[X][ÛØY\[HKÈÝXXËX^Y\NKKJH\ÈÜØ\ßKØY\Û^Ø[[X][ÛØY\^]\ÈÝXXËX^Y\NKKJHÜØ\ßPÙ^Y[Y\ÈØY\]X[ÝÞÝ[ÙÜN[Û]VJ
+__PÙ^Y[Y\ÈØY\[^ÝÞÝÚY_PÙ^Y[Y\ÈØY\^]ÝÞØÛ\\][Ù]
+L	H
+NÛÜXÚ]NÜÚ[\Y][ÎÛ__KÚ\Ù^ÜÜÚ][Û^YÚ[Ù]ÞZ[^NNNÜÚ[\Y][ÎÛNÛÜXÚ]NÍNØXÚÙÜÝ[Z[XYÙN\
+]N[XYÙKÜÝÊÞ[	LÐÜÝÈY]ÐÞIÌMMÈ[ÏIÚËÝÝÝËÌËÜËÌÜÝÉÉLÑILÐÙ[\YIÛÉLÑILÐÙU\[[ÙH\OIÙXÝ[Ú\ÙIÈ\ÙQ\]Y[ÞOIÌIÈ[SØÝ]\ÏIÍ	ÈÝ]Ú[\ÏIÜÝ]Ú	ËÉLÑILÐËÙ[\LÑILÐÜXÝÚYIÌL	LIÈZYÚIÌL	LIÈ[\IÝ\
+	LÛIÈÜXÚ]OIÌIËÉLÑILÐËÜÝÉLÑHNØXÚÙÜÝ[\\X]\X]ØXÚÙÜÝ[\Ú^NM[]ÜÜÚ][Û^YÝÜÛYÜYÚÞZ[^LÜY[ÎK\[HÜ[NÙ\Ü^N^Ú\ÝYKXÛÛ[ÜXÙKX]ÙY[Ø[YÛZ][\ÎÙ[\ÛZ^X[[[ÙNY\[Ù_K][ÙÛÞÙÛY[Z[N\KYÛY\Ü^JNÙÛ]ÙZYÚÙÛ\Ú^NK[NÛ]\\ÜXÚ[ÎK[_K][[ÜÞÙ\Ü^N^ÙØ\\[NÛ\Ý\Ý[NÛ_K][[ÜÈ^ÙÛY[Z[N\KYÛ[[ÛÊNÙÛ\Ú^NÍ\[NÝ^][ÙÜN\\Ø\ÙNÛ]\\ÜXÚ[ÎY[NÜÜÚ][Û[]]NÜY[ËXÝÛNK][[ÜÈNY\ØÛÛ[ÉÎÜÜÚ][ÛXÛÛ]NØÝÛNÛYÝÚYÚZYÚ\ØXÚÙÜÝ[\K]Ú]JNÝ[Ú][ÛÚYÈÝXXËX^Y\NKKJ_K][[ÜÈNÝ\Y\ÝÚYL	_K][Y[KXÙ\Ü^NÛNØXÚÙÜÝ[ÛNØÜ\ÛNØÛÛÜ\K]Ú]JNÙÛY[Z[N\KYÛ[[ÛÊNÙÛ\Ú^NÍ\[NÝ^][ÙÜN\\Ø\ÙNÛ]\\ÜXÚ[ÎY[NØÝ\ÛÜÛ_K\ÞÛZ[ZZYÚLÙ\Ü^N^Ù^Y\XÝ[ÛÛÛ[[Ú\ÝYKXÛÛ[^Y[ÜY[ÎÜ[H
+[NÜÜÚ][Û[]]NÛÝ\ÝÎY[K\ËXË]^ÜÜÚ][ÛXÛÛ]NÝÜL	NÛYL	NÝ[ÙÜN[Û]JML	KML	JNÙÛY[Z[N\KYÛY\Ü^JNÙÛ\Ú^NÛ[\
+[KËN[JNÙÛ]ÙZYÚÛ]\\ÜXÚ[ÎK
+Y[NØÛÛÜ[Ü\[Ë]ÙXÚ]]^\ÝÚÙN\ØJ
+KÍK
+NÝÚ]K\ÜXÙNÝÜ\Ý\Ù\\Ù[XÝÛNÜÚ[\Y][ÎÛ_K\Ë]]^ÙÛY[Z[N\KYÛY\Ü^JNÙÛ\Ú^NÛ[\
+Ë\[KLË\[JNÙÛ]ÙZYÚÛ[KZZYÚNÛ]\\ÜXÚ[ÎK
+[NÛX\Ú[XÝÛN[_K\Ë]]H[^Ù\Ü^NØÚÎÛÝ\ÝÎY[K\Ë]]H[HÜ[Ù\Ü^N[[KXØÚÎÝ[ÙÜN[Û]VJLL	JNÛÜXÚ]NÝ[Ú][Û[ÙÜH\ÈÝXXËX^Y\NKKJKÜXÚ]HÈX\Ù_K\Ë]]H[HÜ[\ÚX^Ý[ÙÜN[Û]VJ
+NÛÜXÚ]N_K\Ë]]HÝÚÙ^Ë]ÙXÚ]]^\ÝÚÙN\K]Ú]JNØÛÛÜ[Ü\[K\Ë]]HXØÙ[ØÛÛÜ\KXXØÙ[
+_K\ËXÝÛ^Ù\Ü^N^Ú\ÝYKXÛÛ[ÜXÙKX]ÙY[Ø[YÛZ][\Î^Y[K\ËZ[ÞÙÛY[Z[N\KYÛ[[ÛÊNÙÛ\Ú^NÍ\[NÛ]\\ÜXÚ[Î
+Y[NØÛÛÜ\KYÜ^JNÛ[KZZYÚKK\Ë\ØÜÛÙ\Ü^N^Ù^Y\XÝ[ÛÛÛ[[Ø[YÛZ][\ÎÙ[\ÙØ\\[NÙÛY[Z[N\KYÛ[[ÛÊNÙÛ\Ú^N\[NÝ^][ÙÜN\\Ø\ÙNÛ]\\ÜXÚ[ÎMY[NØÛÛÜ\KYÜ^J_K\Ë\ØÜÛ\ÝÞÝÚY\ÚZYÚØXÚÙÜÝ[[X\YÜYY[
+ÈÝÛK\KXXØÙ[
+K[Ü\[
+NØ[[X][ÛØÜÛ[ÙHÈX\ÙH[[]_PÙ^Y[Y\ÈØÜÛ[Ù^Ì	KL	^ÛÜXÚ]NNÝ[ÙÜNØØ[VJJ_ML	^ÛÜXÚ]NÝ[ÙÜNØØ[VJ__KX\]YYK\ÙXÝ[ÛÜY[ÎÜ[HØÜ\]Ü\ÛÛYØJ
+KÍK
+NØÜ\XÝÛN\ÛÛYØJ
+KÍK
+NÛÝ\ÝÎY[KX\]YYK]XÚÞÙ\Ü^N^Ø[[X][ÛX\]YYH\È[X\[[]NÝÚYX^XÛÛ[KX\]YYK]XÚÈÜ[ÙÛY[Z[N\KYÛY\Ü^JNÙÛ\Ú^NÛ[\
+K[KÝË\[JNÙÛ]ÙZYÚÝÚ]K\ÜXÙNÝÜ\ÜY[Î[NØÛÛÜØJ
+KÍKMJNÛ]\\ÜXÚ[ÎK[_KX\]YYK]XÚÈÜ[ÝÙ\Ü^N[[KXØÚÎÝÚYÚZYÚØXÚÙÜÝ[\KXXØÙ[
+NØÜ\\Y]\ÎL	NÛX\Ú[[NÝ\XØ[X[YÛZY_PÙ^Y[Y\ÈX\]YY^ÝÞÝ[ÙÜN[Û]V
+ML	J__KÙXÝ[ÛZXY\ÜY[Î[HÜ[H
+[_KÙXÝ[Û[X[ÙÛY[Z[N\KYÛ[[ÛÊNÙÛ\Ú^NÜ[NÝ^][ÙÜN\\Ø\ÙNÛ]\\ÜXÚ[Î[NØÛÛÜ\KXXØÙ[
+NÛX\Ú[XÝÛN\[NÙ\Ü^N^Ø[YÛZ][\ÎÙ[\ÙØ\\[_KÙXÝ[Û[X[YÜ^ØÛÛ[ÉÎÝÚYÚZYÚ\ØXÚÙÜÝ[\KXXØÙ[
+_KÙXÝ[Û]]^ÙÛY[Z[N\KYÛY\Ü^JNÙÛ\Ú^NÛ[\
+\[K
+Ë
+\[JNÙÛ]ÙZYÚÌÛ]\\ÜXÚ[ÎKÙ[NÛ[KZZYÚK_KÚXÝÞÜY[ÎÜ[_KÚXÝZ][^Ù\Ü^NÜYÙÜY][\]KXÛÛ[[ÎYYÙØ\[NÛX\Ú[XÝÛN\[NÜY[Î[HØÜ\XÝÛN\ÛÛYØJ
+KÍK
+NÛÜXÚ]NÝ[ÙÜN[Û]VJ
+
+NÝ[Ú][ÛÜXÚ]HÈX\ÙK[ÙÜHÈÝXXËX^Y\NKKJ_KÚXÝZ][K\ÚX^ÛÜXÚ]NNÝ[ÙÜN[Û]VJ
+_KÚXÝZ][NXÚ[
+][^Ù\XÝ[ÛKÚXÝZ][NXÚ[
+][OÙ\XÝ[ÛKÚXÝ]\ÝX[ÜÜÚ][Û[]]NÛÝ\ÝÎY[ØÜ\\Y]\ÎØ\ÜXÝ\][ÎMÌLØXÚÙÜÝ[ÌXLXLX_KÚXÝ]\ÝX[ÛÛÜXØÚÞÜÜÚ][ÛXÛÛ]NÚ[Ù]Ù\Ü^N^Ø[YÛZ][\ÎÙ[\Ú\ÝYKXÛÛ[Ù[\Ý[Ú][Û[ÙÜHÈÝXXËX^Y\NKKJ_KÚXÝZ][NÝ\ÛÛÜXØÚÞÝ[ÙÜNØØ[JKÊ_KÚXÝ]\ÝX[ÚXÝ[ÙÛÞÙÛY[Z[N\KYÛY\Ü^JNÙÛ]ÙZYÚÙÛ\Ú^NÛ[\
+K[KÝËÜ[JNÛ]\\ÜXÚ[ÎK[NÝ^X[YÛÙ[\ÜY[Î[_KÚXÝ]\ÝX[ÚXÝ]YÜË[Ý\^^ÜÜÚ][ÛXÛÛ]NØÝÛN\[NÛY\[NÙ\Ü^N^ÙØ\\[NÙ^]Ü\Ü\KÚXÝ]YÜË[Ý\^HÜ[ÙÛY[Z[N\KYÛ[[ÛÊNÙÛ\Ú^N[NÝ^][ÙÜN\\Ø\ÙNÛ]\\ÜXÚ[ÎY[NØXÚÙÜÝ[ØJNØÛÛÜÙÜY[ÎÜ[HÜ[NØÜ\\Y]\ÎLØXÚÙÜY[\\L
+_KÚXÝZ[ÞÙ\Ü^N^Ù^Y\XÝ[ÛÛÛ[[Ú\ÝYKXÛÛ[Ù[\ÜY[Î[HKÚXÝ[[X\ÙÛY[Z[N\KYÛ[[ÛÊNÙÛ\Ú^NÜ[NØÛÛÜ\KXXØÙ[
+NÛ]\\ÜXÚ[ÎY[NÛX\Ú[XÝÛNK\[_KÚXÝ[[Y^ÙÛY[Z[N\KYÛY\Ü^JNÙÛ\Ú^NÛ[\
+[K
+ËË\[JNÙÛ]ÙZYÚÌÛ]\\ÜXÚ[ÎKÙ[NÛ[KZZYÚKNÛX\Ú[XÝÛN\[_KÚXÝXØ]YÛÜ^ÙÛY[Z[N\KYÛ[[ÛÊNÙÛ\Ú^NÍ\[NÝ^][ÙÜN\\Ø\ÙNÛ]\\ÜXÚ[ÎY[NØÛÛÜ\KYÜ^JNÛX\Ú[XÝÛNK\[_KÚXÝY\ØÞÙÛ\Ú^N\[NÛ[KZZYÚKÎØÛÛÜ\KXÜX[JNÛX^]ÚY
+LÛÜXÚ]NKØÜÛ\ÙXÝ[ÛÜY[Î[HKØÜÛ]Ü\\ÛÝ\ÝË^]]ÎÛÝ\ÝË^NY[ÝÚ]K\ÜXÙNÝÜ\ÜY[ÎÜ[NÜØÜÛ\]ÚYÛNË[\Ë[Ý\ÝË\Ý[NÛ_KØÜÛ]Ü\\]ÙXÚ]\ØÜÛ\Ù\Ü^NÛ_KØÜÛ]XÚÞÙ\Ü^N[[KY^ÙØ\[NÜY[Ë\YÚÜ[_KØÜÛXØ\Ù\Ü^N[[KXØÚÎÝÚYÙ^\Ú[ÎÝ\XØ[X[YÛÜÝÚ]K\ÜXÙNÜX[KØÜÛXØ\Ø\]\ÝX[ÝÚYL	NØ\ÜXÝ\][ÎNØÜ\\Y]\ÎÛÝ\ÝÎY[ÜÜÚ][Û[]]NÛX\Ú[XÝÛN\[_KØÜÛXØ\Ø\]\ÝX[ÛÛÜXØÚÞÜÜÚ][ÛXÛÛ]NÚ[Ù]Ù\Ü^N^Ø[YÛZ][\ÎÙ[\Ú\ÝYKXÛÛ[Ù[\Ý[Ú][Û[ÙÜH\ÈÝXXËX^Y\NKKJ_KØÜÛXØ\Ý\Ø\]\ÝX[ÛÛÜXØÚÞÝ[ÙÜNØØ[JK
+J_KØÜÛXØ\Ø\]]^ÙÛY[Z[N\KYÛY\Ü^JNÙÛ\Ú^NKÜ[NÙÛ]ÙZYÚÛ]\\ÜXÚ[ÎK[NÛX\Ú[XÝÛNÜ[_KØÜÛXØ\Ø\\ÝXÙÛY[Z[N\KYÛ[[ÛÊNÙÛ\Ú^NÜ[NÝ^][ÙÜN\\Ø\ÙNÛ]\\ÜXÚ[ÎY[NØÛÛÜ\KYÜ^J_KXÝ]ÜY[ÎL[HÜ[NÙ\Ü^NÜYÙÜY][\]KXÛÛ[[ÎYYÙØ\[NØ[YÛZ][\ÎÝ\KXÝ][YYË\][Ý^ÙÛY[Z[N\KYÛY\Ü^JNÙÛ\Ú^NÛ[\
+[K
+ËË\[JNÙÛ]ÙZYÚÌÛ[KZZYÚKÛ]\\ÜXÚ[ÎKÙ[_KXÝ][YYË\][ÝHYÚYÚØÛÛÜ\KXXØÙ[
+_KXÝ]\YÚÜY[Ë]Ü\[_KXÝ]\YÚÙÛ\Ú^NK
+\[NÛ[KZZYÚKØÛÛÜ\KXÜX[JNÛX\Ú[XÝÛN[NÛÜXÚ]N
+_KXÝ]\Ý]ÞÙ\Ü^NÜYÙÜY][\]KXÛÛ[[Î\X]
+ËYNÙØ\[NÛX\Ú[]ÜÜ[NÜY[Ë]ÜÜ[NØÜ\]Ü\ÛÛYØJ
+KÍK
+_KÝ]Z][HÝ][[X\ÙÛY[Z[N\KYÛY\Ü^JNÙÛ\Ú^N\[NÙÛ]ÙZYÚØÛÛÜ\KXXØÙ[
+NÛ]\\ÜXÚ[ÎKÙ[_KÝ]Z][HÝ][X[ÙÛY[Z[N\KYÛ[[ÛÊNÙÛ\Ú^NÜ[NÝ^][ÙÜN\\Ø\ÙNÛ]\\ÜXÚ[ÎY[NØÛÛÜ\KYÜ^JNÛX\Ú[]ÜÜ[_KÙ\XÙ\ÞÜY[ÎÜ[HL[_KÙ\XÙ\ËYÜYÙ\Ü^NÜYÙÜY][\]KXÛÛ[[Î\X]
+
+YNÙØ\\ØXÚÙÜÝ[ØJ
+KÍK
+NÛX\Ú[]Ü[_KÙ\XÙKXØ\ØXÚÙÜÝ[\KXXÚÊNÜY[ÎÜ[H[NÝ[Ú][ÛXÚÙÜÝ[ÈX\ÙNÜÜÚ][Û[]]NÛÝ\ÝÎY[KÙ\XÙKXØ\YÜ^ØÛÛ[ÉÎÜÜÚ][ÛXÛÛ]NØÝÛNÛYÝÚYÚZYÚÜØXÚÙÜÝ[\KXXØÙ[
+NÝ[Ú][ÛÚYÈÝXXËX^Y\NKKJ_KÙ\XÙKXØ\Ý\YÜ^ÝÚYL	_KÙ\XÙKXØ\Ý\ØXÚÙÜÝ[ÌLL_KÙ\XÙK[[X\ÙÛY[Z[N\KYÛ[[ÛÊNÙÛ\Ú^N\[NØÛÛÜ\KXXØÙ[
+NÛ]\\ÜXÚ[ÎMY[NÛX\Ú[XÝÛN[_KÙ\XÙK[[Y^ÙÛY[Z[N\KYÛY\Ü^JNÙÛ\Ú^NK[NÙÛ]ÙZYÚÛ]\\ÜXÚ[ÎK[NÛX\Ú[XÝÛN\[_KÙ\XÙKY\ØÞÙÛ\Ú^N\[NÛ[KZZYÚKØÛÛÜ\KYÜ^J_KÛY[Ë\ÙXÝ[ÛÜY[Î[HÜ[NØÜ\]Ü\ÛÛYØJ
+KÍK
+_KÛY[Ë[\ÝÙ\Ü^N^Ù^]Ü\Ü\ÙØ\\[NÛX\Ú[]ÜÜ[_KÛY[Ë[\ÝÜ[ÙÛY[Z[N\KYÛY\Ü^JNÙÛ\Ú^NÛ[\
+K[KËK[JNÙÛ]ÙZYÚØÛÛÜØJ
+KÍKNÜY[Î\[HK\[NØÜ\\ÛÛYØJ
+KÍK
+NØÜ\\Y]\ÎLÝ[Ú][ÛÛÛÜÜËÜ\XÛÛÜÜÎÛ]\\ÜXÚ[ÎK[_KÛY[Ë[\ÝÜ[Ý\ØÛÛÜ\K]Ú]JNØÜ\XÛÛÜ\KXXØÙ[
+_KÛÛXÝÜY[ÎL[HÜ[NÝ^X[YÛÙ[\ÜÜÚ][Û[]]_KÛÛXÝ\]]^ÙÛY[Z[N\KYÛ[[ÛÊNÙÛ\Ú^NÜ[NÝ^][ÙÜN\\Ø\ÙNÛ]\\ÜXÚ[Î[NØÛÛÜ\KXXØÙ[
+NÛX\Ú[XÝÛN[_KÛÛXÝ]]^ÙÛY[Z[N\KYÛY\Ü^JNÙÛ\Ú^NÛ[\
+Ü[KË
+Ü[JNÙÛ]ÙZYÚÛ]\\ÜXÚ[ÎK
+[NÛ[KZZYÚNÛX\Ú[XÝÛNÜ[_KÛÛXÝ]]H^ÜÜÚ][Û[]]NÙ\Ü^N[[KXØÚßKÛÛXÝ]]HNY\ØÛÛ[ÉÎÜÜÚ][ÛXÛÛ]NØÝÛN
+Y[NÛYÝÚYL	NÚZYÚØXÚÙÜÝ[\KXXØÙ[
+NÝ[ÙÜNØØ[V
+
+NÝ[ÙÜK[ÜYÚ[YÚÝ[Ú][Û[ÙÜHÈÝXXËX^Y\NKKJ_KÛÛXÝ]]HNÝ\Y\Ý[ÙÜNØØ[V
+JNÝ[ÙÜK[ÜYÚ[YKÛÛXÝ[[ÜÞÙ\Ü^N^Ú\ÝYKXÛÛ[Ù[\ÙØ\Ü[NÛX\Ú[]Ü[_KÛÛXÝ[[ÜÈ^ÙÛY[Z[N\KYÛ[[ÛÊNÙÛ\Ú^NÍ\[NÝ^][ÙÜN\\Ø\ÙNÛ]\\ÜXÚ[ÎY[NØÛÛÜ\KYÜ^JNÝ[Ú][ÛÛÛÜÜßKÛÛXÝ[[ÜÈNÝ\ØÛÛÜ\KXXØÙ[
+_YÛÝ\ÜY[Î[HÜ[NØÜ\]Ü\ÛÛYØJ
+KÍK
+NÙ\Ü^N^Ú\ÝYKXÛÛ[ÜXÙKX]ÙY[Ø[YÛZ][\ÎÙ[\YÛÝ\Ü[ÙÛY[Z[N\KYÛ[[ÛÊNÙÛ\Ú^N\[NÝ^][ÙÜN\\Ø\ÙNÛ]\\ÜXÚ[ÎY[NØÛÛÜ\KYÜ^J_K]X[ÛÜXÚ]NÝ[ÙÜN[Û]VJ
+
+NÝ[Ú][ÛÜXÚ]HÈX\ÙK[ÙÜHÈÝXXËX^Y\NKKJ_K]X[\ÚX^ÛÜXÚ]NNÝ[ÙÜN[Û]VJ
+_K]X[Y[^KL^Ý[Ú][ÛY[^N\ßK]X[Y[^KLÝ[Ú][ÛY[^NßK]X[Y[^KLÞÝ[Ú][ÛY[^NÜßPYYXJX^]ÚYL
+^ËÙ\XÙ\ËYÜYÙÜY][\]KXÛÛ[[Î\X]
+Y_KXÝ]ÙÜY][\]KXÛÛ[[ÎYÙØ\Ü[_KØÜÛXØ\ÝÚYÌ_PYYXJX^]ÚYÍ
+^Û]ÜY[Î\[HK\[_K][[ÜÞÙ\Ü^NÛ_K][Y[KXÙ\Ü^NØÚßK\ÞÜY[ÎK\[HÜ[_K\ËXÝÛ^Ù^Y\XÝ[ÛÛÛ[[ÙØ\[NØ[YÛZ][\Î^\Ý\KÙXÝ[ÛZXY\ÜY[Î\[HK\[H[_KÚXÝÞÜY[ÎK\[_KÚXÝZ][^ÙÜY][\]KXÛÛ[[ÎYKÚXÝZ][NXÚ[
+][^Ù\XÝ[ÛKØÜÛ]Ü\\ÜY[ÎK\[_KØÜÛXØ\ÝÚYKXÝ]ÜY[Î\[HK\[_KXÝ]\Ý]ÞÙÜY][\]KXÛÛ[[Î\X]
+ËYNÙØ\\[_KÙ\XÙ\ÞÜY[ÎK\[H
+\[_KÙ\XÙ\ËYÜYÙÜY][\]KXÛÛ[[ÎYKÛY[Ë\ÙXÝ[ÛÜY[Î[HK\[_KÛÛXÝÜY[Î\[HK\[_KÛÛXÝ[[ÜÞÙ^]Ü\Ü\Ú\ÝYKXÛÛ[Ù[\ÙØ\K\[_YÛÝ\ÜY[Î[HK\[NÙ^Y\XÝ[ÛÛÛ[[ÙØ\\[NÝ^X[YÛÙ[\XÙ^ØÝ\ÛÜ]]ßKÝ\ÛÜÝ\ÛÜYÛÝÙ\Ù\Ü^NÛ__PYYXJX^]ÚY
+^Ë\Ë]]^ÙÛ\Ú^N[_KØÜÛXØ\ÝÚY_BÜÝ[OÚXYÙO]Û\ÜÏHØY\YHØY\]Û\ÜÏHØY\]^Ú[LKÜ]
+	ÉÊKX\
+
+ËJOOÜ[Ý[OH[[X][ÛY[^NÚJ
+_\ÈØßOÜÜ[
+KÚ[	ÉÊ_OÙ]]Û\ÜÏHØY\[[HÙ]Ù]]Û\ÜÏHÚ\ÙHÙ]]Û\ÜÏHÝ\ÛÜYHÝ\ÛÜÙ]]Û\ÜÏHÝ\ÛÜYÛÝÙ\YHÝ\ÛÜÛÝÙ\Ù]]HYHÈÛ\ÜÏH][ÙÛÈÙË[YKÜ]
+	È	ÊKX\
+ÏOÖÌJKÚ[	ÉÊ_KØO[Û\ÜÏH][[ÜÈOHYHÝÛÜÈÛÜÏØOÛOOHYHØXÝ]XÝ]ØOÛOOHYHÜÙ\XÙ\ÈÙ\XÙ\ÏØOÛOOHYHØÛÛXÝÛÛXÝØOÛOÝ[]ÛÛ\ÜÏH][Y[KXYHY[PY[OØ]ÛÛ]ÙXÝ[ÛÛ\ÜÏH\ÈYH\È]Û\ÜÏH\ËXË]^ÚÝ^OÙ]]Ý[OHÜÚ][ÛXÛÛ]NÝÜ	NÜYÚL	NÝÚYÌÚZYÚÌØXÚÙÜÝ[\KXXØÙ[
+NØÜ\\Y]\ÎL	NÙ[\\ML
+NÛÜXÚ]NÜÚ[\Y][ÎÛHÙ]]Ý[OHÜÚ][ÛXÛÛ]NØÝÛN	NÛYINÝÚYLÚZYÚLØXÚÙÜÝ[\KXXØÙ[NØÜ\\Y]\ÎL	NÙ[\\LÌ
+NÛÜXÚ]N
+ÜÚ[\Y][ÎÛHÙ]HÛ\ÜÏH\Ë]]HÜ[Û\ÜÏH[HÜ[Ú[L_OÜÜ[ÜÜ[Ü[Û\ÜÏH[HÜ[Û\ÜÏHÝÚÙHÚ[LOÜÜ[ÜÜ[Ü[Û\ÜÏH[HÜ[Ý[OHÛ\Ú^N[NÙÛ]ÙZYÚÛ]\\ÜXÚ[Î
+Y[NÙÛY[Z[N\KYÛ[[ÛÊNØÛÛÜ\KYÜ^JNÝ\XØ[X[YÛZYHÚÝX]K\XÙJ	ÉË	ÏÜ[Û\ÜÏHXØÙ[[\ÏÜÜ[Ê_OÜÜ[ÜÜ[ÚO]Û\ÜÏH\ËXÝÛH]Û\ÜÏH\ËZ[ÈÚ\Ò[ßOÙ]]Û\ÜÏH\Ë\ØÜÛÜ[ØÜÛÜÜ[]Û\ÜÏH\ÝÈÙ]Ù]Ù]ÜÙXÝ[Û]Û\ÜÏHX\]YYK\ÙXÝ[Û]Û\ÜÏHX\]YYK]XÚÈÜ[ÛX\]YY_OÜÜ[Ü[ÛX\]YY_OÜÜ[Ù]Ù]ÙXÝ[ÛYHÛÜÈ]Û\ÜÏHÙXÝ[ÛZXY\]Û\ÜÏHÙXÝ[Û[X[Ù[XÝYÛÜÏÙ]Û\ÜÏHÙXÝ[Û]]HÚXÝÈ]Y[OHÜYÚÙ]]Û\ÜÏHÚXÝÈÜÚßOÙ]ÜÙXÝ[ÛÙXÝ[ÛÛ\ÜÏHØÜÛ\ÙXÝ[ÛYHÛØÚX[]Û\ÜÏHÙXÝ[ÛZXY\]Û\ÜÏHÙXÝ[Û[X[ÛØÚX[YYXH	[\ÈØ[\ZYÛÏÙ]Û\ÜÏHÙXÝ[Û]]HØ[\ZYÛYÚYÚÏÚÙ]]Û\ÜÏHØÜÛ]Ü\\YHØÜÛ]Û\ÜÏHØÜÛ]XÚÈØØ[\ßOÙ]Ù]ÜÙXÝ[ÛÙXÝ[ÛÛ\ÜÏHXÝ]YHXÝ]]Û\ÜÏHXÝ][Y]X[]Û\ÜÏHYË\][ÝHÜ][Ý_OÙ]Ù]]Û\ÜÏHXÝ]\YÚÛ\ÜÏH]X[]X[Y[^KLHØK_OÜÛ\ÜÏH]X[]X[Y[^KLØKOÜÛ\ÜÏH]X[]X[Y[^KLÈØKßOÜ]Û\ÜÏHXÝ]\Ý]È]X[ÜÝ]ßOÙ]Ù]ÜÙXÝ[ÛÙXÝ[ÛYHÙ\XÙ\ÈÛ\ÜÏHÙ\XÙ\È]Û\ÜÏHÙXÝ[ÛZXY\Ý[OHY[Ë[Y]Û\ÜÏHÙXÝ[Û[X[Ú]HÏÙ]Û\ÜÏHÙXÝ[Û]]HÙ\XÙ\ÏÚÙ]]Û\ÜÏHÙ\XÙ\ËYÜYÜÝÜßOÙ]ÜÙXÝ[ÛÙXÝ[ÛÛ\ÜÏHÛY[Ë\ÙXÝ[Û]Û\ÜÏHÙXÝ[Û[X[Ù[XÝYÛY[ÏÙ]]Û\ÜÏHÛY[Ë[\Ý]X[ØÛY[ßOÙ]ÜÙXÝ[ÛÙXÝ[ÛÛ\ÜÏHÛÛXÝYHÛÛXÝ]Ý[OHÜÚ][ÛXÛÛ]NÝÜL	NÛYL	NÝÚYÚZYÚØXÚÙÜÝ[\KXXØÙ[NØÜ\\Y]\ÎL	NÙ[\\
+NÛÜXÚ]N
+ÜÚ[\Y][ÎÛNÝ[ÙÜN[Û]V
+ML	JHÙ]]Û\ÜÏHÛÛXÝ\]]H]X[ØÛÛXÝ]]_OÙ]Û\ÜÏHÛÛXÝ]]H]X[HYHXZ[ÎÙË[XZ[HØÛÛXÝ]_OØOÚ]Û\ÜÏHÛÛXÝ[[ÜÈ]X[Û[ÜßOÙ]ÜÙXÝ[ÛÛÝ\Ü[ØÛÛXÝÛÝ\YOÜÜ[Ü[ØÛÛXÝÛÝ\YÚOÜÜ[ÙÛÝ\ØÜ\Ú[ÝËY][\Ý[\	ÛØY	Ë
+
+OOÜÙ][Y[Ý]
+
+
+OOÙØÝ[Y[Ù][[Y[RY
+	ÛØY\ÊKÛ\ÜÓ\ÝY
+	ÙÛIÊNÜÙ][Y[Ý]
+
+
+OOÙØÝ[Y[]Y\TÙ[XÝÜ[
+	Ë\Ë]]H[HÜ[ÊKÜXXÚ
+
+[JOOÜÙ][Y[Ý]
+
+
+OO[Û\ÜÓ\ÝY
+	Ý\ÚXIÊKJ
+_J_KÌ
+_K
+_JNØÛÛÝÝ\ÛÜYØÝ[Y[Ù][[Y[RY
+	ØÝ\ÛÜÊKÛÝÙ\YØÝ[Y[Ù][[Y[RY
+	ØÝ\ÛÜÛÝÙ\ÊNÛ][Ý\ÙVL[Ý\ÙVOLÜÖLÜÖOLÙØÝ[Y[Y][\Ý[\	Û[Ý\Ù[[ÝIËOOÛ[Ý\ÙVYKÛY[Û[Ý\ÙVOYKÛY[NØÝ\ÛÜÝ[KY[[Ý\ÙVMÉÜ	ÎØÝ\ÛÜÝ[KÜ[[Ý\ÙVKMÉÜ	ßJNÙ[Ý[Û[[X]QÛÝÙ\
+^ÜÜÖ
+ÏJ[Ý\ÙV\ÜÖ
+JNÜÜÖJÏJ[Ý\ÙVK\ÜÖJJNÙÛÝÙ\Ý[KY\ÜÖL
+ÉÜ	ÎÙÛÝÙ\Ý[KÜ\ÜÖKL
+ÉÜ	ÎÜ\]Y\Ý[[X][Û[YJ[[X]QÛÝÙ\_X[[X]QÛÝÙ\
+NÙØÝ[Y[]Y\TÙ[XÝÜ[
+	ØK]ÛÚXÝZ][KÙ\XÙKXØ\ØÜÛXØ\ÛY[Ë[\ÝÜ[ÊKÜXXÚ
+[OÙ[Y][\Ý[\	Û[Ý\ÙY[\Ë
+
+OOÛÝÙ\Û\ÜÓ\ÝY
+	ÚÝ\ÊJNÙ[Y][\Ý[\	Û[Ý\Ù[X]IË
+
+OOÛÝÙ\Û\ÜÓ\Ý[[ÝJ	ÚÝ\ÊJ_JNØÛÛÝØÙ\\[]È[\ÙXÝ[ÛØÙ\\[Y\ÏOÙ[Y\ËÜXXÚ
+[OOÚY[K\Ò[\ÙXÝ[ÊY[K\Ù]Û\ÜÓ\ÝY
+	Ý\ÚXIÊ_J_KÝ\ÚÛMKÛÝX\Ú[ÌML	ßJNÙØÝ[Y[]Y\TÙ[XÝÜ[
+	Ë]X[ÚXÝZ][IÊKÜXXÚ
+[OØÙ\\ØÙ\J[
+JNØÛÛÝØÜÛYØÝ[Y[Ù][[Y[RY
+	ÚØÜÛ	ÊNÚYØÜÛ
+^Û]\ÑÝÛY[ÙKÝ\ØÜÛYÚØÜÛY][\Ý[\	Û[Ý\ÙYÝÛËOOÚ\ÑÝÛ]YNÜÝ\YKYÙVZØÜÛÙÙ]YÜØÜÛYZØÜÛØÜÛYÚØÜÛÝ[KÝ\ÛÜIÙÜX[ÉßJNÚØÜÛY][\Ý[\	Û[Ý\Ù[X]IË
+
+OOÚ\ÑÝÛY[ÙNÚØÜÛÝ[KÝ\ÛÜIÙÜXßJNÚØÜÛY][\Ý[\	Û[Ý\Ù]\	Ë
+
+OOÚ\ÑÝÛY[ÙNÚØÜÛÝ[KÝ\ÛÜIÙÜXßJNÚØÜÛY][\Ý[\	Û[Ý\Ù[[ÝIËOOÚYZ\ÑÝÛ\]\ÙK][Y][
+
+NØÛÛÝYKYÙVZØÜÛÙÙ]YÚØÜÛØÜÛY\ØÜÛYJ\Ý\
+JJNÚØÜÛÝ[KÝ\ÛÜIÙÜXßYØÝ[Y[]Y\TÙ[XÝÜ[
+	ØVÚYHÈIÊKÜXXÚ
+[ÚÜOØ[ÚÜY][\Ý[\	ØÛXÚÉË[Ý[ÛJ^ØÛÛÝ\Ù]YØÝ[Y[]Y\TÙ[XÝÜ\ËÙ]]X]J	ÚYÊJNÚY\Ù]
+^ÙK][Y][
+
+NÝ\Ù]ØÜÛ[ÕY]ÊØZ][ÜÜÛ[ÛÝ	ËØÚÎÜÝ\	ßJ__J_JNØÛÛÝÕ^YØÝ[Y[]Y\TÙ[XÝÜ	Ë\ËXË]^	ÊNÝÚ[ÝËY][\Ý[\	ÜØÜÛ	Ë
+
+OOÚYÕ^
+XÕ^Ý[K[ÙÜOIÝ[Û]JML	KML	JH[Û]V
+	ÊÝÚ[ÝËØÜÛJÊÉÜ
+IßJNØÛÛÝY[PYØÝ[Y[Ù][[Y[RY
+	ÛY[PÊK][ÜÏYØÝ[Y[]Y\TÙ[XÝÜ	Ë][[ÜÉÊNÚYY[P^ÛY[PY][\Ý[\	ØÛXÚÉË
+
+OOØÛÛÝ\ÓÜ[[][ÜËÝ[K\Ü^OOOIÙ^	ÎÛ][ÜËÝ[K\Ü^OZ\ÓÜ[ÉÛÛIÎÙ^	ÎÛ][ÜËÝ[KÜÚ][ÛIÙ^Y	ÎÛ][ÜËÝ[KÜIÍ	ÎÛ][ÜËÝ[KYIÌ	ÎÛ][ÜËÝ[KYÚIÌ	ÎÛ][ÜËÝ[KXÚÙÜÝ[IÝ\KXXÚÊIÎÛ][ÜËÝ[K^\XÝ[ÛIØÛÛ[[ÎÛ][ÜËÝ[KY[ÏIÌ[IÎÛ][ÜËÝ[KØ\IÌK\[IÎÛ][ÜËÝ[K[^IÎNIÎÛY[P^ÛÛ[Z\ÓÜ[ÉÓY[IÎÐÛÜÙIßJ_BÜØÜ\ØÙOÚ[ÂB[Ý[Û]Y]ÔÚ]J
+HÂÛÛÝHÙ][]J
+NÂÛÛÝÈHÙ[\[ÂÛÛÝH\ÎÂÛÛÝHHXÝ]ÂÛÛÝH[YNÂÛÛÝ\Ò[Ó[\ÈH[ËÜ]
+	×ÊKX\
+O[J
+JK[\ÛÛX[KÚ[	ÏÊNÂÛÛÝX\]YYR][\ÈHX\]YYKÜ]
+	Ë	ÊKX\
+ÏOË[J
+JK[\ÛÛX[NÂÛÛÝX\]YYRSHX\]YYR][\ËX\
+ÏO	ÜßHÜ[Û\ÜÏHÝÜÜ[
+KÚ[	È	ÊNÂÛÛÝÛY[Ð\HÛY[ËÜ]
+	×ÊKX\
+ÏOË[J
+JK[\ÛÛX[NÂ]][ÝRSHK][ÝK\XÙJ×
+
+ÊW
+
+ÙË	ÏÜ[Û\ÜÏHYÚYÚOÜÜ[ÊNÂ]ÚSH	ÉÎÂÚXÝËÜXXÚ
+
+JHOÂÛÛÝYÜÒSHYÜËÜ]
+	Ë	ÊKX\
+OÜ[Ý[J
+_OÜÜ[
+KÚ[	ÉÊNÂÛÛÝÙÛÓ[\ÈHÙÛÕ^Ü]
+	×ÊKÚ[	ÏÊNÂÚS
+ÏH]Û\ÜÏHÚXÝZ][H]Û\ÜÏHÚXÝ]\ÝX[]Û\ÜÏHÛÛÜXØÚÈÝ[OHXÚÙÜÝ[ÜÜYY[H]Û\ÜÏHÚXÝ[ÙÛÈÝ[OHÛÛÜÙÛÙÛÓ[\ßOÙ]Ù]]Û\ÜÏHÚXÝ]YÜË[Ý\^HÝYÜÒSOÙ]Ù]]Û\ÜÏHÚXÝZ[È]Û\ÜÏHÚXÝ[[X\ÔÝ[ÊJÌJKYÝ\
+	Ì	Ê_OÙ]ÈÛ\ÜÏHÚXÝ[[YHÜ[Y_OÚÏ]Û\ÜÏHÚXÝXØ]YÛÜHÜØ]YÛÜ_OÙ]Û\ÜÏHÚXÝY\ØÈÜ\ØßOÜÙ]Ù]ÂJNÂ]Ø[\SH	ÉÎÂØ[\ZYÛËÜXXÚ
+ÈOÂÛÛÝÙÛÓ[\ÈHËÙÛÕ^Ü]
+	×ÊKÚ[	ÏÊNÂØ[\S
+ÏH]Û\ÜÏHØÜÛXØ\]Û\ÜÏHØ\]\ÝX[]Û\ÜÏHÛÛÜXØÚÈÝ[OHXÚÙÜÝ[ØËÜYY[H]Û\ÜÏHÚXÝ[ÙÛÈÝ[OHÛÛÜÙÙÛ\Ú^NK\[HÛÙÛÓ[\ßOÙ]Ù]Ù]]Û\ÜÏHØ\]]HØË]_OÙ]]Û\ÜÏHØ\\ÝXØËÝXOÙ]Ù]ÂJNÂ]ÝÒSH	ÉÎÂÙ\XÙ\ËÜXXÚ
+
+ËJHOÂÝÒS
+ÏH]Û\ÜÏHÙ\XÙKXØ\]X[	ÚOÉÈ]X[Y[^KIÊÚNÉßH]Û\ÜÏHÙ\XÙK[[X\ÔÝ[ÊJÌJKYÝ\
+	Ì	Ê_OÙ]]Û\ÜÏHÙ\XÙK[[YHÜË[Y_OÙ]]Û\ÜÏHÙ\XÙKY\ØÈÜË\ØßOÙ]Ù]ÂJNÂÛÛÝÛY[ÒSHÛY[Ð\X\
+ÈOÜ[ØßOÜÜ[
+KÚ[	ÉÊNÂ][ÜÒSHHYHXZ[ÎÙË[XZ[H[XZ[ØOÂYËÚ]XH[ÜÒS
+ÏHHYHÙËÚ]XH\Ù]HØ[ÈÚ]XØOÂYËZ[ÙJH[ÜÒS
+ÏHHYHÙËZ[Ù_H\Ù]HØ[ÈZ[ÙOØOÂYË[ÝYÜ[JH[ÜÒS
+ÏHHYHÙË[ÝYÜ[_H\Ù]HØ[È[ÝYÜ[OØOÂYË[ÙY[H[ÜÒS
+ÏHHYHÙË[ÙY[H\Ù]HØ[È[ÙY[ØOÂÛÛÝÝ]ÒSHKÝ]ËX\
+ÈO]Û\ÜÏHÝ]Z][H]Û\ÜÏHÝ][[X\ÜË[_OÙ]]Û\ÜÏHÝ][X[ÜËX[OÙ]Ù]
+KÚ[	ÉÊNÂÛÛÝ[HZ[[S
+ËK\Ò[Ó[\ËX\]YYRS][ÝRSÚSØ[\SÝÒSÛY[ÒS[ÜÒSÝ]ÒSÛÛXÝ
+NÂÛÛÝØH]ÈØÚ[KÈ\N	Ý^Ú[	ÈJNÂÚ[ÝËÜ[TÜX]SØXÝT
+ØK	×Ø[ÉÊNÂBËÈOOOOHSUOOOOB[\ÚXÝÊ
+NÂ[\Ø[\ZYÛÊ
+NÂ[\Ù\XÙ\Ê
+NÂËÈXÚÈÚ[Ù\ÂØÝ[Y[]Y\TÙ[XÝÜ[
+	Ú[]^\XIÊKÜXXÚ
+[OÂ[Y][\Ý[\	Ú[]	ËX\ÐÚ[ÙY
+NÂJNÂÜØÜ\ØÙOÚ[
