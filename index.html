@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cevher Sarıyıldız — Graphic Designer & Art Director</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--black:#0a0a0a;--white:#f5f0eb;--cream:#e8e0d8;--accent:#ff4d00;--accent2:#6c3ce0;--gray:#888;--font-display:'Syne',sans-serif;--font-body:'Space Grotesk',sans-serif;--font-mono:'Space Mono',monospace}
+html{scroll-behavior:smooth;font-size:16px;overflow-x:hidden}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);cursor:none;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none;cursor:none}img{display:block;max-width:100%}
+.cursor{position:fixed;width:12px;height:12px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:10000;mix-blend-mode:difference;transition:transform .15s ease}
+.cursor-follower{position:fixed;width:40px;height:40px;border:1px solid rgba(255,77,0,.5);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .3s ease,width .3s ease,height .3s ease}
+.cursor-follower.hover{width:80px;height:80px;border-color:var(--accent);background:rgba(255,77,0,.05)}
+.loader{position:fixed;inset:0;background:var(--black);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2rem}
+.loader-text{font-family:var(--font-display);font-size:clamp(2rem,8vw,6rem);font-weight:800;letter-spacing:-.03em;overflow:hidden}
+.loader-text span{display:inline-block;transform:translateY(120%);animation:loaderReveal .8s cubic-bezier(.19,1,.22,1) forwards}
+.loader-line{width:0;height:2px;background:var(--accent);animation:loaderLine 1.8s cubic-bezier(.19,1,.22,1) .5s forwards}
+.loader.done{animation:loaderExit 1s cubic-bezier(.19,1,.22,1) forwards}
+@keyframes loaderReveal{to{transform:translateY(0)}}@keyframes loaderLine{to{width:200px}}@keyframes loaderExit{to{clip-path:inset(0 0 100% 0);opacity:0;pointer-events:none}}.noise{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");background-repeat:repeat;background-size:256px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;mix-blend-mode:difference}
+.nav-logo{font-family:var(--font-display);font-weight:800;font-size:1.2rem;letter-spacing:-.02em}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;position:relative;padding-bottom:2px}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--white);transition:width .4s cubic-bezier(.19,1,.22,1)}
+.nav-links a:hover::after{width:100%}
+.nav-menu-btn{display:none;background:none;border:none;color:var(--white);font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;cursor:none}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 3rem 4rem;position:relative;overflow:hidden}
+.hero-bg-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:clamp(8rem,20vw,18rem);font-weight:800;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:1px rgba(245,240,235,.06);white-space:nowrap;user-select:none;pointer-events:none}
+.hero-title{font-family:var(--font-display);font-size:clamp(3.5rem,10vw,9rem);font-weight:800;line-height:.9;letter-spacing:-.04em;margin-bottom:2rem}
+.hero-title .line{display:block;overflow:hidden}
+.hero-title .line span{display:inline-block;transform:translateY(110%);opacity:0;transition:transform 1s cubic-bezier(.19,1,.22,1),opacity .8s ease}
+.hero-title .line span.visible{transform:translateY(0);opacity:1}
+.hero-title .stroke{-webkit-text-stroke:2px var(--white);color:transparent}
+.hero-title .accent{color:var(--accent)}
+.hero-bottom{display:flex;justify-content:space-between;align-items:flex-end}
+.hero-info{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.05em;color:var(--gray);line-height:1.8}
+.hero-scroll{display:flex;flex-direction:column;align-items:center;gap:.5rem;font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--gray)}
+.hero-scroll .arrow{width:1px;height:60px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollPulse 2s ease infinite}
+@keyframes scrollPulse{0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:.4;transform:scaleY(.6)}}.marquee-section{padding:3rem 0;border-top:1px solid rgba(245,240,235,.08);border-bottom:1px solid rgba(245,240,235,.08);overflow:hidden}
+.marquee-track{display:flex;animation:marquee 25s linear infinite;width:max-content}
+.marquee-track span{font-family:var(--font-display);font-size:clamp(1.2rem,3vw,2.5rem);font-weight:600;white-space:nowrap;padding:0 2rem;color:rgba(245,240,235,.15);letter-spacing:-.02em}
+.marquee-track span .dot{display:inline-block;width:8px;height:8px;background:var(--accent);border-radius:50%;margin:0 2rem;vertical-align:middle}
+@keyframes marquee{to{transform:translateX(-50%)}}
+.section-header{padding:8rem 3rem 4rem}
+.section-label{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);margin-bottom:1rem;display:flex;align-items:center;gap:1rem}
+.section-label::before{content:'';width:40px;height:1px;background:var(--accent)}
+.section-title{font-family:var(--font-display);font-size:clamp(2.5rem,6vw,5rem);font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.projects{padding:0 3rem}
+.project-item{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:1rem;padding:4rem 0;border-bottom:1px solid rgba(245,240,235,.06);opacity:0;transform:translateY(60px);transition:opacity .8s ease,transform .8s cubic-bezier(.19,1,.22,1)}
+.project-item.visible{opacity:1;transform:translateY(0)}
+.project-item:nth-child(even){direction:rtl}.project-item:nth-child(even)>*{direction:ltr}
+.project-visual{position:relative;overflow:hidden;border-radius:4px;aspect-ratio:16/10;background:#1a1a1a}
+.project-visual .color-block{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:transform .6s cubic-bezier(.19,1,.22,1)}
+.project-item:hover .color-block{transform:scale(1.03)}
+.project-visual .project-logo{font-family:var(--font-display);font-weight:800;font-size:clamp(1.8rem,3vw,3rem);letter-spacing:-.02em;text-align:center;padding:2rem}
+.project-visual .project-tags-overlay{position:absolute;bottom:1rem;left:1rem;display:flex;gap:.5rem;flex-wrap:wrap}
+.project-tags-overlay span{font-family:var(--font-mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;background:rgba(0,0,0,.6);color:#fff;padding:.3rem .7rem;border-radius:100px;backdrop-filter:blur(10px)}
+.project-info{display:flex;flex-direction:column;justify-content:center;padding:2rem 0}
+.project-number{font-family:var(--font-mono);font-size:.7rem;color:var(--accent);letter-spacing:.1em;margin-bottom:1.5rem}
+.project-name{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.5rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:1rem}
+.project-category{font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:1.5rem}
+.project-desc{font-size:1rem;line-height:1.7;color:var(--cream);max-width:450px;opacity:.8}.hscroll-section{padding:6rem 0}
+.hscroll-wrapper{overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:0 3rem;scrollbar-width:none;-ms-overflow-style:none}
+.hscroll-wrapper::-webkit-scrollbar{display:none}
+.hscroll-track{display:inline-flex;gap:2rem;padding-right:3rem}
+.hscroll-card{display:inline-block;width:400px;flex-shrink:0;vertical-align:top;white-space:normal}
+.hscroll-card .card-visual{width:100%;aspect-ratio:1;border-radius:4px;overflow:hidden;position:relative;margin-bottom:1rem}
+.hscroll-card .card-visual .color-block{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:transform .5s cubic-bezier(.19,1,.22,1)}
+.hscroll-card:hover .card-visual .color-block{transform:scale(1.05)}
+.hscroll-card .card-title{font-family:var(--font-display);font-size:1.3rem;font-weight:600;letter-spacing:-.02em;margin-bottom:.3rem}
+.hscroll-card .card-sub{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray)}
+.about{padding:10rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start}
+.about-left .big-quote{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.5rem);font-weight:700;line-height:1.2;letter-spacing:-.03em}
+.about-left .big-quote .highlight{color:var(--accent)}
+.about-right{padding-top:1rem}
+.about-right p{font-size:1.05rem;line-height:1.8;color:var(--cream);margin-bottom:2rem;opacity:.85}
+.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;padding-top:3rem;border-top:1px solid rgba(245,240,235,.08)}
+.stat-item .stat-number{font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--accent);letter-spacing:-.03em}
+.stat-item .stat-label{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-top:.3rem}
+.services{padding:0 3rem 10rem}
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(245,240,235,.06);margin-top:4rem}
+.service-card{background:var(--black);padding:3rem 2rem;transition:background .4s ease;position:relative;overflow:hidden}
+.service-card::before{content:'';position:absolute;bottom:0;left:0;width:0;height:3px;background:var(--accent);transition:width .6s cubic-bezier(.19,1,.22,1)}
+.service-card:hover::before{width:100%}.service-card:hover{background:#111}
+.service-number{font-family:var(--font-mono);font-size:.65rem;color:var(--accent);letter-spacing:.15em;margin-bottom:2rem}
+.service-name{font-family:var(--font-display);font-size:1.4rem;font-weight:600;letter-spacing:-.02em;margin-bottom:1rem}
+.service-desc{font-size:.9rem;line-height:1.6;color:var(--gray)}
+.clients-section{padding:6rem 3rem;border-top:1px solid rgba(245,240,235,.06)}
+.clients-list{display:flex;flex-wrap:wrap;gap:1rem;margin-top:3rem}
+.clients-list span{font-family:var(--font-display);font-size:clamp(1.2rem,2vw,1.8rem);font-weight:600;color:rgba(245,240,235,.2);padding:.5rem 1.5rem;border:1px solid rgba(245,240,235,.06);border-radius:100px;transition:color .3s,border-color .3s;letter-spacing:-.02em}
+.clients-list span:hover{color:var(--white);border-color:var(--accent)}.contact{padding:10rem 3rem;text-align:center;position:relative}
+.contact-pretitle{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);margin-bottom:2rem}
+.contact-title{font-family:var(--font-display);font-size:clamp(3rem,8vw,7rem);font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:3rem}
+.contact-title a{position:relative;display:inline-block}
+.contact-title a::after{content:'';position:absolute;bottom:.05em;left:0;width:100%;height:4px;background:var(--accent);transform:scaleX(0);transform-origin:right;transition:transform .6s cubic-bezier(.19,1,.22,1)}
+.contact-title a:hover::after{transform:scaleX(1);transform-origin:left}
+.contact-links{display:flex;justify-content:center;gap:3rem;margin-top:2rem}
+.contact-links a{font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);transition:color .3s}
+.contact-links a:hover{color:var(--accent)}
+footer{padding:2rem 3rem;border-top:1px solid rgba(245,240,235,.06);display:flex;justify-content:space-between;align-items:center}
+footer span{font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray)}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s cubic-bezier(.19,1,.22,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}
+@media(max-width:1024px){.services-grid{grid-template-columns:repeat(2,1fr)}.about{grid-template-columns:1fr;gap:3rem}.hscroll-card{width:320px}}
+@media(max-width:768px){nav{padding:1rem 1.5rem}.nav-links{display:none}.nav-menu-btn{display:block}.hero{padding:0 1.5rem 3rem}.hero-bottom{flex-direction:column;gap:2rem;align-items:flex-start}.section-header{padding:5rem 1.5rem 2rem}.projects{padding:0 1.5rem}.project-item{grid-template-columns:1fr}.project-item:nth-child(even){direction:ltr}.hscroll-wrapper{padding:0 1.5rem}.hscroll-card{width:280px}.about{padding:5rem 1.5rem}.about-stats{grid-template-columns:repeat(3,1fr);gap:1rem}.services{padding:0 1.5rem 5rem}.services-grid{grid-template-columns:1fr}.clients-section{padding:4rem 1.5rem}.contact{padding:5rem 1.5rem}.contact-links{flex-wrap:wrap;justify-content:center;gap:1.5rem}footer{padding:2rem 1.5rem;flex-direction:column;gap:1rem;text-align:center}body{cursor:auto}.cursor,.cursor-follower{display:none}}
+@media(max-width:480px){.hero-title{font-size:2.8rem}.hscroll-card{width:260px}}
+</style>
+</head>
+<body>
+<div class="loader" id="loader"><div class="loader-text"><span style="animation-delay:0s">C</span><span style="animation-delay:.05s">E</span><span style="animation-delay:.1s">V</span><span style="animation-delay:.15s">H</span><span style="animation-delay:.2s">E</span><span style="animation-delay:.25s">R</span></div><div class="loader-line"></div></div>
+<div class="noise"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursorFollower"></div><nav><a href="#" class="nav-logo">CS.</a><ul class="nav-links"><li><a href="#work">Work</a></li><li><a href="#about">About</a></li><li><a href="#services">Services</a></li><li><a href="#contact">Contact</a></li></ul><button class="nav-menu-btn" id="menuBtn">Menu</button></nav>
+<section class="hero" id="hero">
+<div class="hero-bg-text">DESIGN</div>
+<div style="position:absolute;top:20%;right:10%;width:300px;height:300px;background:var(--accent);border-radius:50%;filter:blur(150px);opacity:.08;pointer-events:none"></div>
+<div style="position:absolute;bottom:20%;left:5%;width:250px;height:250px;background:var(--accent2);border-radius:50%;filter:blur(130px);opacity:.06;pointer-events:none"></div>
+<h1 class="hero-title">
+<span class="line"><span>Cevher</span></span>
+<span class="line"><span class="stroke">Sarıyıldız</span></span>
+<span class="line"><span style="font-size:.4em;font-weight:400;letter-spacing:.05em;font-family:var(--font-mono);color:var(--gray);vertical-align:middle">Graphic Design <span class="accent">&amp;</span> Art Direction</span></span>
+</h1>
+<div class="hero-bottom">
+<div class="hero-info">Based in Turkey<br>Available for Freelance<br>Crafting visual identities since 2018</div>
+<div class="hero-scroll"><span>Scroll</span><div class="arrow"></div></div>
+</div>
+</section>
+<div class="marquee-section"><div class="marquee-track"><span>Brand Identity <span class="dot"></span> Packaging Design <span class="dot"></span> Art Direction <span class="dot"></span> Social Media <span class="dot"></span> Visual Systems <span class="dot"></span> Typography <span class="dot"></span> Advertising <span class="dot"></span></span><span>Brand Identity <span class="dot"></span> Packaging Design <span class="dot"></span> Art Direction <span class="dot"></span> Social Media <span class="dot"></span> Visual Systems <span class="dot"></span> Typography <span class="dot"></span> Advertising <span class="dot"></span></span></div></div><section id="work">
+<div class="section-header"><div class="section-label">Selected Work</div><h2 class="section-title">Projects that define<br>the craft</h2></div>
+<div class="projects">
+<div class="project-item">
+<div class="project-visual"><div class="color-block" style="background:linear-gradient(135deg,#1a5c3a,#2d8f5e,#3cb371)"><div class="project-logo" style="color:#fff"><div style="font-size:.4em;font-weight:400;letter-spacing:.2em;font-family:var(--font-mono);margin-bottom:.5rem">KONYA</div>Büyükşehir<br>Belediyesi<div style="width:60px;height:3px;background:#fff;margin:1rem auto 0;opacity:.5"></div></div></div><div class="project-tags-overlay"><span>Brand Identity</span><span>Environmental</span></div></div>
+<div class="project-info"><div class="project-number">01</div><h3 class="project-name">Konya Metropolitan Municipality</h3><div class="project-category">Brand Identity &amp; Environmental Graphics</div><p class="project-desc">Complete visual identity system for one of Turkey's largest metropolitan municipalities. Designed environmental graphics spanning city billboards, transit systems, public buildings and official communications — creating a unified civic brand language across all touchpoints.</p></div>
+</div>
+<div class="project-item">
+<div class="project-visual"><div class="color-block" style="background:linear-gradient(135deg,#00e676,#6c3ce0,#00bcd4)"><div class="project-logo" style="color:#fff"><div style="font-size:1.5em;letter-spacing:-.03em">betista<span style="color:#00e676">.io</span></div><div style="font-size:.35em;font-weight:400;font-family:var(--font-mono);letter-spacing:.15em;margin-top:.5rem;opacity:.7">CRYPTO · NFT · WEB3</div></div></div><div class="project-tags-overlay"><span>Brand Identity</span><span>Web3</span></div></div>
+<div class="project-info"><div class="project-number">02</div><h3 class="project-name">Betista.io</h3><div class="project-category">Brand Identity &amp; Digital Platform</div><p class="project-desc">Bold visual identity for a Web3 and NFT platform. Developed a dynamic brand system with vibrant color language, geometric logomark combining cube and "B" letterform, plus a comprehensive campaign system spanning digital, outdoor advertising and social channels.</p></div>
+</div><div class="project-item">
+<div class="project-visual"><div class="color-block" style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d)"><div class="project-logo"><span style="color:#ff6600;font-size:1.4em;letter-spacing:.05em">RAM</span><br><span style="color:#ff6600;font-size:.5em;font-weight:400;letter-spacing:.3em;font-family:var(--font-mono)">ROBOTICS</span></div></div><div class="project-tags-overlay"><span>Brand Identity</span><span>Industrial</span></div></div>
+<div class="project-info"><div class="project-number">03</div><h3 class="project-name">RAM Robotics</h3><div class="project-category">Industrial Brand Identity</div><p class="project-desc">Industrial-grade brand identity for a robotics company. The bold geometric logomark uses negative space to create the "RAM" letters. Applied across uniforms, safety equipment, fleet vehicles and full corporate stationery — all anchored in a striking orange and black palette.</p></div>
+</div>
+<div class="project-item">
+<div class="project-visual"><div class="color-block" style="background:linear-gradient(135deg,#3a5ba0,#4e8cc7,#e8657a)"><div class="project-logo" style="color:#fff"><div style="display:flex;align-items:center;justify-content:center;gap:.5rem"><span style="font-size:1.3em;color:#e8657a">Y</span><span style="font-size:1.1em">Yükseller</span></div><div style="font-size:.3em;font-weight:400;font-family:var(--font-mono);letter-spacing:.2em;margin-top:.5rem;opacity:.6">LOGISTICS &amp; TRANSPORT</div></div></div><div class="project-tags-overlay"><span>Brand Identity</span><span>Logistics</span></div></div>
+<div class="project-info"><div class="project-number">04</div><h3 class="project-name">Yükseller</h3><div class="project-category">Logistics Brand Identity</div><p class="project-desc">Complete brand identity for a logistics and transport company. The "Y" mark cleverly integrates a play button and upward arrow — symbolizing forward momentum. The visual system extends across truck fleet livery, building signage, corporate stationery and digital presence.</p></div>
+</div>
+<div class="project-item">
+<div class="project-visual"><div class="color-block" style="background:linear-gradient(135deg,#0033ff,#1a1aff)"><div class="project-logo" style="color:#fff"><span style="font-size:1.3em">Yes!<span style="font-weight:400">We</span>Able</span><div style="font-size:.3em;font-weight:400;font-family:var(--font-mono);letter-spacing:.15em;margin-top:.5rem;opacity:.6">CREATIVE AGENCY</div></div></div><div class="project-tags-overlay"><span>Brand Identity</span><span>Agency</span></div></div>
+<div class="project-info"><div class="project-number">05</div><h3 class="project-name">Yes!WeAble</h3><div class="project-category">Creative Agency Branding</div><p class="project-desc">Energetic brand identity for a creative agency built on optimism. Designed a vibrant sticker-based visual language, bold Helvetica typography, and a thumbs-up icon system. The playful yet confident identity spans print collateral, merchandise, social content and physical space design.</p></div>
+</div>
+</div></section><section class="hscroll-section" id="social">
+<div class="section-header"><div class="section-label">Social Media &amp; Campaigns</div><h2 class="section-title">Campaign highlights</h2></div>
+<div class="hscroll-wrapper" id="hscroll"><div class="hscroll-track">
+<div class="hscroll-card"><div class="card-visual"><div class="color-block" style="background:linear-gradient(135deg,#c62828,#8b0000)"><div class="project-logo" style="color:#fff;font-size:1.5rem"><div style="font-size:.6em;font-family:var(--font-mono);letter-spacing:.15em;margin-bottom:.5rem">TURKISH TECHNIC</div>Holiday<br>Campaign</div></div></div><div class="card-title">Turkish Technic — Holiday Series</div><div class="card-sub">Social Media Design</div></div>
+<div class="hscroll-card"><div class="card-visual"><div class="color-block" style="background:linear-gradient(135deg,#b71c1c,#d32f2f)"><div class="project-logo" style="color:#fff;font-size:1.5rem"><div style="font-size:.6em;font-family:var(--font-mono);letter-spacing:.15em;margin-bottom:.5rem">TURKISH TECHNIC</div>Mother's Day<br>&amp; Special Days</div></div></div><div class="card-title">Turkish Technic — Special Days</div><div class="card-sub">Social Media Design</div></div>
+<div class="hscroll-card"><div class="card-visual"><div class="color-block" style="background:linear-gradient(135deg,#1a1a1a,#333,#1a1a1a)"><div class="project-logo" style="color:#fdd835;font-size:1.5rem"><div style="font-size:.6em;font-family:var(--font-mono);letter-spacing:.15em;margin-bottom:.5rem;color:#fff">NESINE.COM</div>Serie A<br>Match Day</div></div></div><div class="card-title">Nesine.com — Serie A Campaign</div><div class="card-sub">Sports Marketing</div></div>
+<div class="hscroll-card"><div class="card-visual"><div class="color-block" style="background:linear-gradient(135deg,#2e2e2e,#444)"><div class="project-logo" style="color:#fdd835;font-size:1.5rem"><div style="font-size:.6em;font-family:var(--font-mono);letter-spacing:.15em;margin-bottom:.5rem;color:#fff">NESINE.COM</div>FIFA World Cup<br>2022</div></div></div><div class="card-title">Nesine.com — World Cup</div><div class="card-sub">Sports Marketing</div></div>
+<div class="hscroll-card"><div class="card-visual"><div class="color-block" style="background:linear-gradient(135deg,#0d47a1,#1565c0)"><div class="project-logo" style="color:#fff;font-size:1.5rem"><div style="font-size:.6em;font-family:var(--font-mono);letter-spacing:.15em;margin-bottom:.5rem">NESINE.COM</div>Old Firm<br>Derby</div></div></div><div class="card-title">Nesine.com — Old Firm</div><div class="card-sub">Sports Marketing</div></div>
+<div class="hscroll-card"><div class="card-visual"><div class="color-block" style="background:linear-gradient(135deg,#00e676,#6c3ce0)"><div class="project-logo" style="color:#fff;font-size:1.5rem"><div style="font-size:.6em;font-family:var(--font-mono);letter-spacing:.15em;margin-bottom:.5rem">BETISTA.IO</div>NFT &amp;<br>Crypto Ads</div></div></div><div class="card-title">Betista.io — Social Campaign</div><div class="card-sub">Digital Advertising</div></div>
+</div></div></section><section class="about" id="about">
+<div class="about-left reveal"><div class="big-quote">I transform brands into <span class="highlight">living systems</span> — from pixel to billboard, from screen to street.</div></div>
+<div class="about-right">
+<p class="reveal reveal-delay-1">I'm Cevher Sarıyıldız, a graphic designer and art director based in Turkey. My work spans the full spectrum of visual communication — brand identities, environmental graphics, packaging, digital campaigns, and advertising design.</p>
+<p class="reveal reveal-delay-2">I've had the privilege of working with major clients including Turkish Technic (Turkish Airlines Group), Konya Metropolitan Municipality, and international digital platforms. Each project is an opportunity to build visual systems that are both conceptually sharp and aesthetically bold.</p>
+<p class="reveal reveal-delay-3">Whether it's crafting a geometric logomark for a robotics company or designing a match-day poster for a sports platform, I approach every brief with the same obsessive attention to detail and strategic thinking.</p>
+<div class="about-stats reveal">
+<div class="stat-item"><div class="stat-number">50+</div><div class="stat-label">Projects</div></div>
+<div class="stat-item"><div class="stat-number">30+</div><div class="stat-label">Clients</div></div>
+<div class="stat-item"><div class="stat-number">6+</div><div class="stat-label">Years Exp.</div></div>
+</div></div></section>
+<section id="services" class="services">
+<div class="section-header" style="padding-left:0"><div class="section-label">What I Do</div><h2 class="section-title">Services</h2></div>
+<div class="services-grid">
+<div class="service-card reveal"><div class="service-number">01</div><div class="service-name">Brand Identity</div><div class="service-desc">Logo design, visual systems, brand guidelines, and complete identity packages that give brands a distinct, memorable presence.</div></div>
+<div class="service-card reveal reveal-delay-1"><div class="service-number">02</div><div class="service-name">Art Direction</div><div class="service-desc">Creative direction for campaigns, photoshoots, and multi-platform projects — ensuring visual consistency and conceptual clarity.</div></div>
+<div class="service-card reveal reveal-delay-2"><div class="service-number">03</div><div class="service-name">Social &amp; Digital</div><div class="service-desc">Social media design, digital advertising, campaign visuals, and content systems built for engagement and brand recognition.</div></div>
+<div class="service-card reveal reveal-delay-3"><div class="service-number">04</div><div class="service-name">Environmental</div><div class="service-desc">Signage, wayfinding, billboard design, vehicle wraps, and spatial graphics that bring brands into the physical world.</div></div>
+</div></section><section class="clients-section"><div class="section-label">Selected Clients</div><div class="clients-list reveal"><span>Turkish Technic</span><span>Konya Municipality</span><span>Betista.io</span><span>Nesine.com</span><span>RAM Robotics</span><span>Yükseller</span><span>Yes!WeAble</span></div></section>
+<section class="contact" id="contact">
+<div style="position:absolute;top:10%;left:50%;width:400px;height:400px;background:var(--accent2);border-radius:50%;filter:blur(200px);opacity:.06;pointer-events:none;transform:translateX(-50%)"></div>
+<div class="contact-pretitle reveal">Let's Create Together</div>
+<h2 class="contact-title reveal"><a href="mailto:cvhrsryldz96@gmail.com">Say hello.</a></h2>
+<div class="contact-links reveal"><a href="mailto:cvhrsryldz96@gmail.com">Email</a><a href="https://github.com/cvhrsryldz" target="_blank" rel="noopener">GitHub</a><a href="#" target="_blank" rel="noopener">Behance</a><a href="#" target="_blank" rel="noopener">Instagram</a></div>
+</section>
+<footer><span>&copy; 2026 Cevher Sarıyıldız</span><span>Design &amp; Development</span></footer>
+<script>
+window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('loader').classList.add('done');setTimeout(()=>{document.querySelectorAll('.hero-title .line span').forEach((el,i)=>{setTimeout(()=>el.classList.add('visible'),i*200)})},300)},2200)});
+const cursor=document.getElementById('cursor'),follower=document.getElementById('cursorFollower');let mouseX=0,mouseY=0,posX=0,posY=0;
+document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY;cursor.style.left=mouseX-6+'px';cursor.style.top=mouseY-6+'px'});
+function animateFollower(){posX+=(mouseX-posX)*.1;posY+=(mouseY-posY)*.1;follower.style.left=posX-20+'px';follower.style.top=posY-20+'px';requestAnimationFrame(animateFollower)}animateFollower();
+document.querySelectorAll('a,button,.project-item,.service-card,.hscroll-card,.clients-list span').forEach(el=>{el.addEventListener('mouseenter',()=>follower.classList.add('hover'));el.addEventListener('mouseleave',()=>follower.classList.remove('hover'))});
+const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible')})},{threshold:.15,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.reveal,.project-item').forEach(el=>observer.observe(el));
+const hscroll=document.getElementById('hscroll');if(hscroll){let isDown=false,startX,scrollLeft;hscroll.addEventListener('mousedown',e=>{isDown=true;startX=e.pageX-hscroll.offsetLeft;scrollLeft=hscroll.scrollLeft;hscroll.style.cursor='grabbing'});hscroll.addEventListener('mouseleave',()=>{isDown=false;hscroll.style.cursor='grab'});hscroll.addEventListener('mouseup',()=>{isDown=false;hscroll.style.cursor='grab'});hscroll.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();const x=e.pageX-hscroll.offsetLeft;hscroll.scrollLeft=scrollLeft-(x-startX)*2});hscroll.style.cursor='grab'}
+document.querySelectorAll('a[href^="#"]').forEach(anchor=>{anchor.addEventListener('click',function(e){const target=document.querySelector(this.getAttribute('href'));if(target){e.preventDefault();target.scrollIntoView({behavior:'smooth',block:'start'})}})});
+const bgText=document.querySelector('.hero-bg-text');window.addEventListener('scroll',()=>{if(bgText)bgText.style.transform='translate(-50%,-50%) translateX('+window.scrollY*.3+'px)'});
+const menuBtn=document.getElementById('menuBtn'),navLinks=document.querySelector('.nav-links');if(menuBtn){menuBtn.addEventListener('click',()=>{const isOpen=navLinks.style.display==='flex';navLinks.style.display=isOpen?'none':'flex';navLinks.style.position='fixed';navLinks.style.top='60px';navLinks.style.left='0';navLinks.style.right='0';navLinks.style.background='var(--black)';navLinks.style.flexDirection='column';navLinks.style.padding='2rem';navLinks.style.gap='1.5rem';navLinks.style.zIndex='99';menuBtn.textContent=isOpen?'Menu':'Close'})}
+</script>
+</body></html>
