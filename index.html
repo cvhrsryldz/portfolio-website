@@ -239,16 +239,17 @@ rendered.push(tc.getImageData(0,0,w,h));
 loading.classList.add('hidden');
 let currentFrame=-1;
 function showFrame(idx){if(idx===currentFrame||idx<0||idx>=rendered.length)return;currentFrame=idx;ctx.putImageData(rendered[idx],0,0);}
-const midFrame=Math.floor(rendered.length/2);
-showFrame(midFrame);
+const totalFrames=rendered.length;
+showFrame(0);
 let ticking=false;
 function onScroll(){
 if(ticking)return;ticking=true;
 requestAnimationFrame(()=>{
 const rect=section.getBoundingClientRect();
-const wh=window.innerHeight;
-const progress=Math.max(0,Math.min(1,(wh-rect.top)/(wh+rect.height)));
-const fi=rendered.length-1-Math.floor(progress*(rendered.length-1));
+const scrollOffset=-rect.top;
+const pixelsPerCycle=window.innerHeight+rect.height;
+const rawFrame=Math.floor(-scrollOffset*(totalFrames/pixelsPerCycle));
+const fi=((rawFrame%totalFrames)+totalFrames)%totalFrames;
 showFrame(fi);
 ticking=false;
 });
