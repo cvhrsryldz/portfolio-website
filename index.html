@@ -74,9 +74,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 3rem;display:
 .hscroll-card:hover .card-visual .color-block{transform:scale(1.05)}
 .hscroll-card .card-title{font-family:var(--font-display);font-size:1.3rem;font-weight:600;letter-spacing:-.02em;margin-bottom:.3rem}
 .hscroll-card .card-sub{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray)}
-.about{padding:10rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start}
-.about-left .big-quote{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.5rem);font-weight:700;line-height:1.2;letter-spacing:-.03em}
-.about-left .big-quote .highlight{color:var(--accent)}
+.about{padding:10rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.about-left{position:sticky;top:100px}
+.about-gif-container{position:relative;background:#f0f0f0;border-radius:16px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.about-gif-container canvas{width:100%;height:auto;display:block;transition:transform .4s cubic-bezier(.19,1,.22,1);transform-origin:center center}
+.about-gif-container .gif-overlay{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,77,0,.12) 0%,transparent 50%);opacity:0;transition:opacity .4s ease}
+.about-gif-container:hover .gif-overlay{opacity:1}
+.about-gif-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;color:#888;background:#f0f0f0;z-index:2;transition:opacity .5s ease}
+.about-gif-loading.hidden{opacity:0;pointer-events:none}
+.about-right .big-quote{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.5rem);font-weight:700;line-height:1.2;letter-spacing:-.03em;margin-bottom:3rem}
+.about-right .big-quote .highlight{color:var(--accent)}
 .about-right{padding-top:1rem}
 .about-right p{font-size:1.05rem;line-height:1.8;color:var(--cream);margin-bottom:2rem;opacity:.85}
 .about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;padding-top:3rem;border-top:1px solid rgba(245,240,235,.08)}
@@ -107,7 +114,7 @@ footer span{font-family:var(--font-mono);font-size:.65rem;text-transform:upperca
 .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s cubic-bezier(.19,1,.22,1)}
 .reveal.visible{opacity:1;transform:translateY(0)}
 .reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}
-@media(max-width:1024px){.services-grid{grid-template-columns:repeat(2,1fr)}.about{grid-template-columns:1fr;gap:3rem}.hscroll-card{width:320px}}
+@media(max-width:1024px){.services-grid{grid-template-columns:repeat(2,1fr)}.about{grid-template-columns:1fr;gap:3rem}.about-left{position:relative;top:auto}.about-gif-container{max-width:500px;margin:0 auto}.hscroll-card{width:320px}}
 @media(max-width:768px){nav{padding:1rem 1.5rem}.nav-links{display:none}.nav-menu-btn{display:block}.hero{padding:0 1.5rem 3rem}.hero-bottom{flex-direction:column;gap:2rem;align-items:flex-start}.section-header{padding:5rem 1.5rem 2rem}.projects{padding:0 1.5rem}.project-item{grid-template-columns:1fr}.project-item:nth-child(even){direction:ltr}.hscroll-wrapper{padding:0 1.5rem}.hscroll-card{width:280px}.about{padding:5rem 1.5rem}.about-stats{grid-template-columns:repeat(3,1fr);gap:1rem}.services{padding:0 1.5rem 5rem}.services-grid{grid-template-columns:1fr}.clients-section{padding:4rem 1.5rem}.contact{padding:5rem 1.5rem}.contact-links{flex-wrap:wrap;justify-content:center;gap:1.5rem}footer{padding:2rem 1.5rem;flex-direction:column;gap:1rem;text-align:center}body{cursor:auto}.cursor,.cursor-follower{display:none}}
 @media(max-width:480px){.hero-title{font-size:2.8rem}.hscroll-card{width:260px}}
 </style>
@@ -163,8 +170,9 @@ footer span{font-family:var(--font-mono);font-size:.65rem;text-transform:upperca
 <div class="hscroll-card"><div class="card-visual"><div class="color-block" style="background:linear-gradient(135deg,#0d47a1,#1565c0)"><div class="project-logo" style="color:#fff;font-size:1.5rem"><div style="font-size:.6em;font-family:var(--font-mono);letter-spacing:.15em;margin-bottom:.5rem">NESINE.COM</div>Old Firm<br>Derby</div></div></div><div class="card-title">Nesine.com — Old Firm</div><div class="card-sub">Sports Marketing</div></div>
 <div class="hscroll-card"><div class="card-visual"><div class="color-block" style="background:linear-gradient(135deg,#00e676,#6c3ce0)"><div class="project-logo" style="color:#fff;font-size:1.5rem"><div style="font-size:.6em;font-family:var(--font-mono);letter-spacing:.15em;margin-bottom:.5rem">BETISTA.IO</div>NFT &amp;<br>Crypto Ads</div></div></div><div class="card-title">Betista.io — Social Campaign</div><div class="card-sub">Digital Advertising</div></div>
 </div></div></section><section class="about" id="about">
-<div class="about-left reveal"><div class="big-quote">I transform brands into <span class="highlight">living systems</span> — from pixel to billboard, from screen to street.</div></div>
+<div class="about-left"><div class="about-gif-container" id="gifContainer"><canvas id="gif-canvas"></canvas><div class="gif-overlay"></div><div class="about-gif-loading" id="gifLoading">Loading...</div></div></div>
 <div class="about-right">
+<div class="big-quote reveal">I transform brands into <span class="highlight">living systems</span> — from pixel to billboard, from screen to street.</div>
 <p class="reveal reveal-delay-1">I'm Cevher Sarıyıldız, a graphic designer and art director based in Turkey. My work spans the full spectrum of visual communication — brand identities, environmental graphics, packaging, digital campaigns, and advertising design.</p>
 <p class="reveal reveal-delay-2">I've had the privilege of working with major clients including Turkish Technic (Turkish Airlines Group), Konya Metropolitan Municipality, and international digital platforms. Each project is an opportunity to build visual systems that are both conceptually sharp and aesthetically bold.</p>
 <p class="reveal reveal-delay-3">Whether it's crafting a geometric logomark for a robotics company or designing a match-day poster for a sports platform, I approach every brief with the same obsessive attention to detail and strategic thinking.</p>
@@ -193,12 +201,73 @@ window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('loa
 const cursor=document.getElementById('cursor'),follower=document.getElementById('cursorFollower');let mouseX=0,mouseY=0,posX=0,posY=0;
 document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY;cursor.style.left=mouseX-6+'px';cursor.style.top=mouseY-6+'px'});
 function animateFollower(){posX+=(mouseX-posX)*.1;posY+=(mouseY-posY)*.1;follower.style.left=posX-20+'px';follower.style.top=posY-20+'px';requestAnimationFrame(animateFollower)}animateFollower();
-document.querySelectorAll('a,button,.project-item,.service-card,.hscroll-card,.clients-list span').forEach(el=>{el.addEventListener('mouseenter',()=>follower.classList.add('hover'));el.addEventListener('mouseleave',()=>follower.classList.remove('hover'))});
+document.querySelectorAll('a,button,.project-item,.service-card,.hscroll-card,.clients-list span,.about-gif-container').forEach(el=>{el.addEventListener('mouseenter',()=>follower.classList.add('hover'));el.addEventListener('mouseleave',()=>follower.classList.remove('hover'))});
 const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible')})},{threshold:.15,rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('.reveal,.project-item').forEach(el=>observer.observe(el));
 const hscroll=document.getElementById('hscroll');if(hscroll){let isDown=false,startX,scrollLeft;hscroll.addEventListener('mousedown',e=>{isDown=true;startX=e.pageX-hscroll.offsetLeft;scrollLeft=hscroll.scrollLeft;hscroll.style.cursor='grabbing'});hscroll.addEventListener('mouseleave',()=>{isDown=false;hscroll.style.cursor='grab'});hscroll.addEventListener('mouseup',()=>{isDown=false;hscroll.style.cursor='grab'});hscroll.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();const x=e.pageX-hscroll.offsetLeft;hscroll.scrollLeft=scrollLeft-(x-startX)*2});hscroll.style.cursor='grab'}
 document.querySelectorAll('a[href^="#"]').forEach(anchor=>{anchor.addEventListener('click',function(e){const target=document.querySelector(this.getAttribute('href'));if(target){e.preventDefault();target.scrollIntoView({behavior:'smooth',block:'start'})}})});
 const bgText=document.querySelector('.hero-bg-text');window.addEventListener('scroll',()=>{if(bgText)bgText.style.transform='translate(-50%,-50%) translateX('+window.scrollY*.3+'px)'});
 const menuBtn=document.getElementById('menuBtn'),navLinks=document.querySelector('.nav-links');if(menuBtn){menuBtn.addEventListener('click',()=>{const isOpen=navLinks.style.display==='flex';navLinks.style.display=isOpen?'none':'flex';navLinks.style.position='fixed';navLinks.style.top='60px';navLinks.style.left='0';navLinks.style.right='0';navLinks.style.background='var(--black)';navLinks.style.flexDirection='column';navLinks.style.padding='2rem';navLinks.style.gap='1.5rem';navLinks.style.zIndex='99';menuBtn.textContent=isOpen?'Menu':'Close'})}
+</script>
+<script type="module">
+import{parseGIF,decompressFrames}from'https://cdn.jsdelivr.net/npm/gifuct-js@2.1.2/+esm';
+(async function(){
+const canvas=document.getElementById('gif-canvas');
+const ctx=canvas.getContext('2d');
+const container=document.getElementById('gifContainer');
+const loading=document.getElementById('gifLoading');
+const section=document.getElementById('about');
+const overlay=container.querySelector('.gif-overlay');
+try{
+const resp=await fetch('aboutme.gif');
+const buf=await resp.arrayBuffer();
+const gif=parseGIF(buf);
+const frames=decompressFrames(gif,true);
+if(!frames.length)return;
+const w=gif.lsd.width,h=gif.lsd.height;
+canvas.width=w;canvas.height=h;
+const tmp=document.createElement('canvas');
+const tc=tmp.getContext('2d');
+tmp.width=w;tmp.height=h;
+const rendered=[];
+frames.forEach((fr,i)=>{
+if(i>0){const pf=frames[i-1];if(pf.disposalType===2)tc.clearRect(pf.dims.left,pf.dims.top,pf.dims.width,pf.dims.height);}
+const id=new ImageData(new Uint8ClampedArray(fr.patch),fr.dims.width,fr.dims.height);
+tc.putImageData(id,fr.dims.left,fr.dims.top);
+rendered.push(tc.getImageData(0,0,w,h));
+});
+loading.classList.add('hidden');
+let currentFrame=-1;
+function showFrame(idx){if(idx===currentFrame||idx<0||idx>=rendered.length)return;currentFrame=idx;ctx.putImageData(rendered[idx],0,0);}
+showFrame(0);
+let ticking=false;
+function onScroll(){
+if(ticking)return;ticking=true;
+requestAnimationFrame(()=>{
+const rect=section.getBoundingClientRect();
+const wh=window.innerHeight;
+const progress=Math.max(0,Math.min(1,(wh-rect.top)/(wh+rect.height)));
+const fi=Math.floor(progress*(rendered.length-1));
+showFrame(fi);
+ticking=false;
+});
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+onScroll();
+container.addEventListener('mousemove',(e)=>{
+const r=container.getBoundingClientRect();
+const x=(e.clientX-r.left)/r.width;
+const y=(e.clientY-r.top)/r.height;
+const rx=(x-.5)*12;
+const ry=(y-.5)*-8;
+canvas.style.transform='perspective(800px) rotateY('+rx+'deg) rotateX('+ry+'deg) scale(1.04)';
+overlay.style.setProperty('--mx',x*100+'%');
+overlay.style.setProperty('--my',y*100+'%');
+});
+container.addEventListener('mouseleave',()=>{
+canvas.style.transform='perspective(800px) rotateY(0deg) rotateX(0deg) scale(1)';
+});
+}catch(err){console.error('GIF load error:',err);loading.textContent='Failed to load';}
+})();
 </script>
 </body></html>
