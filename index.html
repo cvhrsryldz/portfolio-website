@@ -74,25 +74,21 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 3rem;display:
 .hscroll-card:hover .card-visual .color-block{transform:scale(1.05)}
 .hscroll-card .card-title{font-family:var(--font-display);font-size:1.3rem;font-weight:600;letter-spacing:-.02em;margin-bottom:.3rem}
 .hscroll-card .card-sub{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray)}
-.about{padding:10rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.about{padding:10rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;background:#ffffff;position:relative;z-index:1}
 .about-left{position:sticky;top:100px}
 .about-gif-container{position:relative;background:#f0f0f0;border-radius:16px;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .about-gif-container canvas{width:33.33%;height:auto;display:block;transition:transform .4s cubic-bezier(.19,1,.22,1);transform-origin:center center}
-.about-gif-titles{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:2rem 2.5rem;pointer-events:none;z-index:3}
-.about-gif-titles .title-top,.about-gif-titles .title-bottom{font-family:var(--font-display);font-weight:800;font-size:clamp(1.5rem,3vw,2.5rem);letter-spacing:-.03em;text-transform:uppercase;color:#0a0a0a}
-.about-gif-titles .title-top{align-self:flex-start}
-.about-gif-titles .title-bottom{align-self:flex-end;color:var(--accent)}
 .about-gif-container .gif-overlay{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,77,0,.12) 0%,transparent 50%);opacity:0;transition:opacity .4s ease}
 .about-gif-container:hover .gif-overlay{opacity:1}
 .about-gif-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;color:#888;background:#f0f0f0;z-index:2;transition:opacity .5s ease}
 .about-gif-loading.hidden{opacity:0;pointer-events:none}
-.about-right .big-quote{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.5rem);font-weight:700;line-height:1.2;letter-spacing:-.03em;margin-bottom:3rem}
+.about-right .big-quote{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.5rem);font-weight:700;line-height:1.2;letter-spacing:-.03em;margin-bottom:3rem;color:#0a0a0a}
 .about-right .big-quote .highlight{color:var(--accent)}
 .about-right{padding-top:1rem}
-.about-right p{font-size:1.05rem;line-height:1.8;color:var(--cream);margin-bottom:2rem;opacity:.85}
-.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;padding-top:3rem;border-top:1px solid rgba(245,240,235,.08)}
+.about-right p{font-size:1.05rem;line-height:1.8;color:#333;margin-bottom:2rem;opacity:.85}
+.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;padding-top:3rem;border-top:1px solid rgba(10,10,10,.12)}
 .stat-item .stat-number{font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--accent);letter-spacing:-.03em}
-.stat-item .stat-label{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-top:.3rem}
+.stat-item .stat-label{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:#666;margin-top:.3rem}
 .services{padding:0 3rem 10rem}
 .services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(245,240,235,.06);margin-top:4rem}
 .service-card{background:var(--black);padding:3rem 2rem;transition:background .4s ease;position:relative;overflow:hidden}
@@ -174,7 +170,7 @@ footer span{font-family:var(--font-mono);font-size:.65rem;text-transform:upperca
 <div class="hscroll-card"><div class="card-visual"><div class="color-block" style="background:linear-gradient(135deg,#0d47a1,#1565c0)"><div class="project-logo" style="color:#fff;font-size:1.5rem"><div style="font-size:.6em;font-family:var(--font-mono);letter-spacing:.15em;margin-bottom:.5rem">NESINE.COM</div>Old Firm<br>Derby</div></div></div><div class="card-title">Nesine.com — Old Firm</div><div class="card-sub">Sports Marketing</div></div>
 <div class="hscroll-card"><div class="card-visual"><div class="color-block" style="background:linear-gradient(135deg,#00e676,#6c3ce0)"><div class="project-logo" style="color:#fff;font-size:1.5rem"><div style="font-size:.6em;font-family:var(--font-mono);letter-spacing:.15em;margin-bottom:.5rem">BETISTA.IO</div>NFT &amp;<br>Crypto Ads</div></div></div><div class="card-title">Betista.io — Social Campaign</div><div class="card-sub">Digital Advertising</div></div>
 </div></div></section><section class="about" id="about">
-<div class="about-left"><div class="about-gif-container" id="gifContainer"><canvas id="gif-canvas"></canvas><div class="gif-overlay"></div><div class="about-gif-titles"><span class="title-top">Hakkımda</span><span class="title-bottom">Projeler</span></div><div class="about-gif-loading" id="gifLoading">Loading...</div></div></div>
+<div class="about-left"><div class="about-gif-container" id="gifContainer"><canvas id="gif-canvas"></canvas><div class="gif-overlay"></div><div class="about-gif-loading" id="gifLoading">Loading...</div></div></div>
 <div class="about-right">
 <div class="big-quote reveal">I transform brands into <span class="highlight">living systems</span> — from pixel to billboard, from screen to street.</div>
 <p class="reveal reveal-delay-1">I'm Cevher Sarıyıldız, a graphic designer and art director based in Turkey. My work spans the full spectrum of visual communication — brand identities, environmental graphics, packaging, digital campaigns, and advertising design.</p>
