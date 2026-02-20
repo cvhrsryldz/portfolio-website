@@ -105,12 +105,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 3rem;display:
 .service-number{font-family:var(--font-mono);font-size:.65rem;color:var(--accent);letter-spacing:.15em;margin-bottom:2rem}
 .service-name{font-family:var(--font-display);font-size:1.4rem;font-weight:600;letter-spacing:-.02em;margin-bottom:1rem}
 .service-desc{font-size:.9rem;line-height:1.6;color:var(--gray)}
-.physics-section{padding:0;border-top:1px solid rgba(230,230,230,.06);position:relative;overflow:hidden}
-.physics-container{position:relative;width:100%;height:53vh;overflow:hidden;pointer-events:none}
-.physics-container canvas{pointer-events:none}
-.physics-body{pointer-events:auto}
-.physics-container canvas{display:block;width:100%;height:100%}
-.physics-body{position:absolute;user-select:none;-webkit-user-drag:none;cursor:none}
+.physics-section{-webkit-user-select:none;user-select:none;padding:0;border-top:1px solid rgba(230,230,230,.06);position:relative;overflow:hidden}
+.physics-container{position:relative;width:100%;height:53vh;overflow:hidden;cursor:none}
+.physics-container canvas{display:block;width:100%;height:100%;position:relative;z-index:2;cursor:none}
+.physics-body{position:absolute;user-select:none;-webkit-user-drag:none;cursor:none;pointer-events:none;z-index:1}
 .physics-body img{width:100%;height:100%;pointer-events:none}.contact{padding:10rem 3rem;text-align:center;position:relative}
 .contact-pretitle{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);margin-bottom:2rem}
 .contact-title{font-family:var(--font-display);font-size:clamp(3rem,8vw,7rem);font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:3rem}
@@ -213,7 +211,7 @@ window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('loa
 const cursor=document.getElementById('cursor'),follower=document.getElementById('cursorFollower');let mouseX=0,mouseY=0,posX=0,posY=0;
 document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY;cursor.style.left=mouseX-6+'px';cursor.style.top=mouseY-6+'px'});
 function animateFollower(){posX+=(mouseX-posX)*.1;posY+=(mouseY-posY)*.1;follower.style.left=posX-20+'px';follower.style.top=posY-20+'px';requestAnimationFrame(animateFollower)}animateFollower();
-document.querySelectorAll('a,button,.gallery-item,.service-card,.physics-body').forEach(el=>{el.addEventListener('mouseenter',()=>follower.classList.add('hover'));el.addEventListener('mouseleave',()=>follower.classList.remove('hover'))});
+document.querySelectorAll('a,button,.gallery-item,.service-card').forEach(el=>{el.addEventListener('mouseenter',()=>follower.classList.add('hover'));el.addEventListener('mouseleave',()=>follower.classList.remove('hover'))});
 const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible')})},{threshold:.15,rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('.reveal,.gallery-item').forEach(el=>observer.observe(el));
 const modal=document.getElementById('projectModal'),modalHeroImg=document.getElementById('modalHeroImg'),modalTitle=document.getElementById('modalTitle'),modalCat=document.getElementById('modalCategory'),modalDesc=document.getElementById('modalDesc'),modalCreditsGrid=document.getElementById('modalCreditsGrid'),modalGalleryGrid=document.getElementById('modalGalleryGrid');
@@ -278,19 +276,29 @@ onScroll();
 const container=document.getElementById('physicsContainer');
 const section=document.getElementById('physicsSection');
 if(!container||!section)return;
-const assets=['Asset1.svg','Asset2.svg','Asset3.svg','Asset4.svg','Asset5.svg','Asset6.svg','Asset7.svg','Asset8.svg'];
-const Engine=Matter.Engine,Render=Matter.Render,Runner=Matter.Runner,Bodies=Matter.Bodies,Composite=Matter.Composite,Mouse=Matter.Mouse,MouseConstraint=Matter.MouseConstraint,Events=Matter.Events;
-let engine,render,runner,mouse,mouseConstraint;
+const assetData=[
+{src:'Asset1.svg',vw:609.56,vh:124.75},
+{src:'Asset2.svg',vw:254.62,vh:124.75},
+{src:'Asset3.svg',vw:124.8,vh:124.8},
+{src:'Asset4.svg',vw:124.75,vh:124.75},
+{src:'Asset5.svg',vw:345.94,vh:124.75},
+{src:'Asset6.svg',vw:548.2,vh:124.8},
+{src:'Asset7.svg',vw:124.75,vh:124.75},
+{src:'Asset8.svg',vw:375.16,vh:124.75}
+];
+const Engine=Matter.Engine,Bodies=Matter.Bodies,Composite=Matter.Composite,Mouse=Matter.Mouse,MouseConstraint=Matter.MouseConstraint,Events=Matter.Events,Body=Matter.Body;
+let engine,mouse,mouseConstraint;
 let started=false;
+let delayTimer=null;
+let rafId=null;
 let bodies=[];
 let domElements=[];
+let bodyDims=[];
 
-function getSize(){
+function getBaseHeight(){
 const w=container.clientWidth;
 const isMobile=w<768;
-const count=assets.length;
-const baseSize=isMobile?w/3:w/count;
-return Math.min(Math.max(baseSize,80),200)*2.5;
+return isMobile?128:192;
 }
 
 function init(){
@@ -300,22 +308,22 @@ const cw=container.clientWidth;
 const ch=container.clientHeight;
 
 engine=Engine.create({gravity:{x:0,y:1.5}});
-render=Render.create({element:container,engine:engine,options:{width:cw,height:ch,wireframes:false,background:'transparent',pixelRatio:window.devicePixelRatio||1}});
-render.canvas.style.position='absolute';
-render.canvas.style.top='0';
-render.canvas.style.left='0';
 
 const wallT=60;
 const ground=Bodies.rectangle(cw/2,ch+wallT/2,cw*2,wallT,{isStatic:true,render:{visible:false}});
 const wallL=Bodies.rectangle(-wallT/2,ch/2,wallT,ch*2,{isStatic:true,render:{visible:false}});
 const wallR=Bodies.rectangle(cw+wallT/2,ch/2,wallT,ch*2,{isStatic:true,render:{visible:false}});
-Composite.add(engine.world,[ground,wallL,wallR]);
+const ceiling=Bodies.rectangle(cw/2,-wallT/2,cw*2,wallT,{isStatic:true,render:{visible:false}});
+Composite.add(engine.world,[ground,wallL,wallR,ceiling]);
 
-const size=getSize();
-assets.forEach(function(src,i){
-const x=Math.random()*(cw-size)+size/2;
-const y=-(size+Math.random()*400+i*150);
-const body=Bodies.rectangle(x,y,size,size,{
+const baseH=getBaseHeight();
+assetData.forEach(function(asset,i){
+const ratio=asset.vw/asset.vh;
+const h=baseH;
+const w=h*ratio;
+const x=Math.random()*(cw-w)+w/2;
+const y=-(h+Math.random()*400+i*150);
+const body=Bodies.rectangle(x,y,w,h,{
 restitution:0.3,
 friction:0.5,
 frictionAir:0.01,
@@ -324,100 +332,106 @@ render:{visible:false}
 });
 Composite.add(engine.world,body);
 bodies.push(body);
+bodyDims.push({w:w,h:h});
 
 const el=document.createElement('div');
 el.className='physics-body';
-el.style.width=size+'px';
-el.style.height=size+'px';
+el.style.width=w+'px';
+el.style.height=h+'px';
 el.style.position='absolute';
 const img=document.createElement('img');
-img.src=src;
-img.alt='Client '+( i+1);
+img.src=asset.src;
+img.alt='Client '+(i+1);
 img.draggable=false;
 el.appendChild(img);
 container.appendChild(el);
 domElements.push(el);
 });
 
-mouse=Mouse.create(container);
+var inputCanvas=document.createElement('canvas');
+inputCanvas.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;cursor:none;';
+inputCanvas.width=cw;
+inputCanvas.height=ch;
+container.appendChild(inputCanvas);
+
+mouse=Mouse.create(inputCanvas);
 mouse.pixelRatio=window.devicePixelRatio||1;
 mouseConstraint=MouseConstraint.create(engine,{
 mouse:mouse,
-constraint:{stiffness:0.6,damping:0.1,render:{visible:false}}
+constraint:{stiffness:0.2,damping:0.3,render:{visible:false}}
 });
 Composite.add(engine.world,mouseConstraint);
 
 mouse.element.removeEventListener('mousewheel',mouse.mousewheel);
 mouse.element.removeEventListener('DOMMouseScroll',mouse.mousewheel);
 
-container.style.pointerEvents='none';
-domElements.forEach(function(el){el.style.pointerEvents='auto';el.style.cursor='grab';});
+inputCanvas.addEventListener('mousedown',function(e){e.preventDefault();},{passive:false});
+inputCanvas.addEventListener('selectstart',function(e){e.preventDefault();},{passive:false});
 
-container.addEventListener('mousedown',function(e){
-var rect=container.getBoundingClientRect();
-mouse.position.x=e.clientX-rect.left;
-mouse.position.y=e.clientY-rect.top;
-mouse.button=0;
-},{passive:true});
-container.addEventListener('mousemove',function(e){
-var rect=container.getBoundingClientRect();
-mouse.position.x=e.clientX-rect.left;
-mouse.position.y=e.clientY-rect.top;
-},{passive:true});
-container.addEventListener('mouseup',function(){
-mouse.button=-1;
-},{passive:true});
-
-container.addEventListener('touchstart',function(e){
-if(e.touches.length===1){
-const rect=container.getBoundingClientRect();
-const touch=e.touches[0];
-mouse.position.x=(touch.clientX-rect.left)*(mouse.pixelRatio||1);
-mouse.position.y=(touch.clientY-rect.top)*(mouse.pixelRatio||1);
-mouse.button=0;
+Events.on(engine,'afterUpdate',function(){
+for(var i=0;i<bodies.length;i++){
+var b=bodies[i];
+var d=bodyDims[i];
+var px=b.position.x;
+var py=b.position.y;
+var clamped=false;
+if(px<d.w/2){px=d.w/2;clamped=true;}
+if(px>cw-d.w/2){px=cw-d.w/2;clamped=true;}
+if(py<d.h/2){py=d.h/2;clamped=true;}
+if(py>ch-d.h/2){py=ch-d.h/2;clamped=true;}
+if(clamped){
+Body.setPosition(b,{x:px,y:py});
+Body.setVelocity(b,{x:b.velocity.x*0.5,y:b.velocity.y*0.5});
 }
-},{passive:true});
+}
+});
+
 container.addEventListener('touchmove',function(e){
 if(mouseConstraint.body&&e.cancelable){e.preventDefault();}
-if(e.touches.length===1){
-const rect=container.getBoundingClientRect();
-const touch=e.touches[0];
-mouse.position.x=(touch.clientX-rect.left)*(mouse.pixelRatio||1);
-mouse.position.y=(touch.clientY-rect.top)*(mouse.pixelRatio||1);
-}
 },{passive:false});
-container.addEventListener('touchend',function(){
-mouse.button=-1;
-},{passive:true});
 
-Render.run(render);
-runner=Runner.create();
-Runner.run(runner,engine);
-
-(function update(){
+var lastTime=performance.now();
+var accumulator=0;
+var fixedDt=1000/60;
+(function update(now){
+if(!started){rafId=null;return;}
+var delta=now-lastTime;
+lastTime=now;
+if(delta>100)delta=100;
+accumulator+=delta;
+while(accumulator>=fixedDt){
+Engine.update(engine,fixedDt);
+accumulator-=fixedDt;
+}
 for(var i=0;i<bodies.length;i++){
 var b=bodies[i];
 var el=domElements[i];
-el.style.transform='translate('+(b.position.x-parseFloat(el.style.width)/2)+'px,'+(b.position.y-parseFloat(el.style.height)/2)+'px) rotate('+b.angle+'rad)';
+var d=bodyDims[i];
+el.style.transform='translate('+(b.position.x-d.w/2)+'px,'+(b.position.y-d.h/2)+'px) rotate('+b.angle+'rad)';
 }
-requestAnimationFrame(update);
-})();
+rafId=requestAnimationFrame(update);
+})(performance.now());
 }
 
 function cleanup(){
 if(!started)return;
 started=false;
-if(runner)Runner.stop(runner);
-if(render){Render.stop(render);render.canvas.remove();}
+if(delayTimer){clearTimeout(delayTimer);delayTimer=null;}
+if(rafId){cancelAnimationFrame(rafId);rafId=null;}
 if(engine)Engine.clear(engine);
+var inputCanvas=container.querySelector('canvas');
+if(inputCanvas)inputCanvas.remove();
 bodies=[];
+bodyDims=[];
 domElements.forEach(function(el){el.remove();});
 domElements=[];
 }
 
 const sectionObs=new IntersectionObserver(function(entries){
 entries.forEach(function(entry){
-if(entry.isIntersecting&&!started){init();}
+if(entry.isIntersecting&&!started){
+delayTimer=setTimeout(function(){delayTimer=null;init();},1000);
+}
 });
 },{threshold:0.1});
 sectionObs.observe(section);
