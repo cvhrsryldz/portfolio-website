@@ -105,10 +105,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 3rem;display:
 .service-number{font-family:var(--font-mono);font-size:.65rem;color:var(--accent);letter-spacing:.15em;margin-bottom:2rem}
 .service-name{font-family:var(--font-display);font-size:1.4rem;font-weight:600;letter-spacing:-.02em;margin-bottom:1rem}
 .service-desc{font-size:.9rem;line-height:1.6;color:var(--gray)}
-.clients-section{padding:6rem 3rem;border-top:1px solid rgba(230,230,230,.06)}
-.clients-list{display:flex;flex-wrap:wrap;gap:1rem;margin-top:3rem}
-.clients-list span{font-family:var(--font-display);font-size:clamp(1.2rem,2vw,1.8rem);font-weight:600;color:rgba(230,230,230,.2);padding:.5rem 1.5rem;border:1px solid rgba(230,230,230,.06);border-radius:100px;transition:color .3s,border-color .3s;letter-spacing:-.02em}
-.clients-list span:hover{color:var(--white);border-color:var(--accent)}.contact{padding:10rem 3rem;text-align:center;position:relative}
+.physics-section{padding:0;border-top:1px solid rgba(230,230,230,.06);position:relative;overflow:hidden}
+.physics-header{padding:6rem 3rem 2rem}
+.physics-container{position:relative;width:100%;height:80vh;overflow:hidden;cursor:none}
+.physics-container canvas{display:block;width:100%;height:100%}
+.physics-body{position:absolute;user-select:none;-webkit-user-drag:none;cursor:none}
+.physics-body img{width:100%;height:100%;pointer-events:none}.contact{padding:10rem 3rem;text-align:center;position:relative}
 .contact-pretitle{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);margin-bottom:2rem}
 .contact-title{font-family:var(--font-display);font-size:clamp(3rem,8vw,7rem);font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:3rem}
 .contact-title a{position:relative;display:inline-block}
@@ -194,7 +196,11 @@ footer span{font-family:var(--font-mono);font-size:.65rem;text-transform:upperca
 <div class="service-card reveal reveal-delay-1"><div class="service-number">02</div><div class="service-name">Art Direction</div><div class="service-desc">Creative direction for campaigns, photoshoots, and multi-platform projects — ensuring visual consistency and conceptual clarity.</div></div>
 <div class="service-card reveal reveal-delay-2"><div class="service-number">03</div><div class="service-name">Social &amp; Digital</div><div class="service-desc">Social media design, digital advertising, campaign visuals, and content systems built for engagement and brand recognition.</div></div>
 <div class="service-card reveal reveal-delay-3"><div class="service-number">04</div><div class="service-name">Environmental</div><div class="service-desc">Signage, wayfinding, billboard design, vehicle wraps, and spatial graphics that bring brands into the physical world.</div></div>
-</div></section><section class="clients-section"><div class="section-label">Selected Clients</div><div class="clients-list reveal"><span>Turkish Technic</span><span>Konya Municipality</span><span>Betista.io</span><span>Nesine.com</span><span>RAM Robotics</span><span>Yükseller</span><span>Yes!WeAble</span></div></section>
+</div></section>
+<section class="physics-section" id="physicsSection">
+<div class="physics-header"><div class="section-label">Selected Clients</div></div>
+<div class="physics-container" id="physicsContainer"></div>
+</section>
 <section class="contact" id="contact">
 <div style="position:absolute;top:10%;left:50%;width:400px;height:400px;background:var(--accent2);border-radius:50%;filter:blur(200px);opacity:.06;pointer-events:none;transform:translateX(-50%)"></div>
 <div class="contact-pretitle reveal">Let's Create Together</div>
@@ -207,7 +213,7 @@ window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('loa
 const cursor=document.getElementById('cursor'),follower=document.getElementById('cursorFollower');let mouseX=0,mouseY=0,posX=0,posY=0;
 document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY;cursor.style.left=mouseX-6+'px';cursor.style.top=mouseY-6+'px'});
 function animateFollower(){posX+=(mouseX-posX)*.1;posY+=(mouseY-posY)*.1;follower.style.left=posX-20+'px';follower.style.top=posY-20+'px';requestAnimationFrame(animateFollower)}animateFollower();
-document.querySelectorAll('a,button,.gallery-item,.service-card,.clients-list span').forEach(el=>{el.addEventListener('mouseenter',()=>follower.classList.add('hover'));el.addEventListener('mouseleave',()=>follower.classList.remove('hover'))});
+document.querySelectorAll('a,button,.gallery-item,.service-card,.physics-body').forEach(el=>{el.addEventListener('mouseenter',()=>follower.classList.add('hover'));el.addEventListener('mouseleave',()=>follower.classList.remove('hover'))});
 const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible')})},{threshold:.15,rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('.reveal,.gallery-item').forEach(el=>observer.observe(el));
 const modal=document.getElementById('projectModal'),modalHeroImg=document.getElementById('modalHeroImg'),modalTitle=document.getElementById('modalTitle'),modalCat=document.getElementById('modalCategory'),modalDesc=document.getElementById('modalDesc'),modalCreditsGrid=document.getElementById('modalCreditsGrid'),modalGalleryGrid=document.getElementById('modalGalleryGrid');
@@ -264,6 +270,144 @@ ticking=false;
 window.addEventListener('scroll',onScroll,{passive:true});
 onScroll();
 }catch(err){console.error('GIF load error:',err);loading.textContent='Failed to load';}
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/matter-js@0.20.0/build/matter.min.js"></script>
+<script>
+(function(){
+const container=document.getElementById('physicsContainer');
+const section=document.getElementById('physicsSection');
+if(!container||!section)return;
+const assets=['Asset1.svg','Asset2.svg','Asset3.svg','Asset4.svg','Asset5.svg','Asset6.svg','Asset7.svg','Asset8.svg'];
+const Engine=Matter.Engine,Render=Matter.Render,Runner=Matter.Runner,Bodies=Matter.Bodies,Composite=Matter.Composite,Mouse=Matter.Mouse,MouseConstraint=Matter.MouseConstraint,Events=Matter.Events;
+let engine,render,runner,mouse,mouseConstraint;
+let started=false;
+let bodies=[];
+let domElements=[];
+
+function getSize(){
+const w=container.clientWidth;
+const isMobile=w<768;
+const count=assets.length;
+const baseSize=isMobile?w/3:w/count;
+return Math.min(Math.max(baseSize,80),200);
+}
+
+function init(){
+if(started)return;
+started=true;
+const cw=container.clientWidth;
+const ch=container.clientHeight;
+
+engine=Engine.create({gravity:{x:0,y:1.5}});
+render=Render.create({element:container,engine:engine,options:{width:cw,height:ch,wireframes:false,background:'transparent',pixelRatio:window.devicePixelRatio||1}});
+render.canvas.style.position='absolute';
+render.canvas.style.top='0';
+render.canvas.style.left='0';
+
+const wallT=60;
+const ground=Bodies.rectangle(cw/2,ch+wallT/2,cw*2,wallT,{isStatic:true,render:{visible:false}});
+const wallL=Bodies.rectangle(-wallT/2,ch/2,wallT,ch*2,{isStatic:true,render:{visible:false}});
+const wallR=Bodies.rectangle(cw+wallT/2,ch/2,wallT,ch*2,{isStatic:true,render:{visible:false}});
+Composite.add(engine.world,[ground,wallL,wallR]);
+
+const size=getSize();
+assets.forEach(function(src,i){
+const x=Math.random()*(cw-size)+size/2;
+const y=-(size+Math.random()*400+i*150);
+const body=Bodies.rectangle(x,y,size,size,{
+restitution:0.3,
+friction:0.5,
+frictionAir:0.01,
+density:0.002,
+render:{visible:false}
+});
+Composite.add(engine.world,body);
+bodies.push(body);
+
+const el=document.createElement('div');
+el.className='physics-body';
+el.style.width=size+'px';
+el.style.height=size+'px';
+el.style.position='absolute';
+const img=document.createElement('img');
+img.src=src;
+img.alt='Client '+( i+1);
+img.draggable=false;
+el.appendChild(img);
+container.appendChild(el);
+domElements.push(el);
+});
+
+mouse=Mouse.create(container);
+mouse.pixelRatio=window.devicePixelRatio||1;
+mouseConstraint=MouseConstraint.create(engine,{
+mouse:mouse,
+constraint:{stiffness:0.6,damping:0.1,render:{visible:false}}
+});
+Composite.add(engine.world,mouseConstraint);
+
+container.addEventListener('touchstart',function(e){
+if(e.touches.length===1){
+const rect=container.getBoundingClientRect();
+const touch=e.touches[0];
+mouse.position.x=(touch.clientX-rect.left)*(mouse.pixelRatio||1);
+mouse.position.y=(touch.clientY-rect.top)*(mouse.pixelRatio||1);
+mouse.button=0;
+}
+},{passive:false});
+container.addEventListener('touchmove',function(e){
+if(mouseConstraint.body){e.preventDefault();}
+if(e.touches.length===1){
+const rect=container.getBoundingClientRect();
+const touch=e.touches[0];
+mouse.position.x=(touch.clientX-rect.left)*(mouse.pixelRatio||1);
+mouse.position.y=(touch.clientY-rect.top)*(mouse.pixelRatio||1);
+}
+},{passive:false});
+container.addEventListener('touchend',function(){
+mouse.button=-1;
+},{passive:true});
+
+Render.run(render);
+runner=Runner.create();
+Runner.run(runner,engine);
+
+(function update(){
+for(var i=0;i<bodies.length;i++){
+var b=bodies[i];
+var el=domElements[i];
+el.style.transform='translate('+(b.position.x-parseFloat(el.style.width)/2)+'px,'+(b.position.y-parseFloat(el.style.height)/2)+'px) rotate('+b.angle+'rad)';
+}
+requestAnimationFrame(update);
+})();
+}
+
+function cleanup(){
+if(!started)return;
+started=false;
+if(runner)Runner.stop(runner);
+if(render){Render.stop(render);render.canvas.remove();}
+if(engine)Engine.clear(engine);
+bodies=[];
+domElements.forEach(function(el){el.remove();});
+domElements=[];
+}
+
+const sectionObs=new IntersectionObserver(function(entries){
+entries.forEach(function(entry){
+if(entry.isIntersecting&&!started){init();}
+});
+},{threshold:0.1});
+sectionObs.observe(section);
+
+let resizeTimer;
+window.addEventListener('resize',function(){
+clearTimeout(resizeTimer);
+resizeTimer=setTimeout(function(){
+if(started){cleanup();init();}
+},300);
+});
 })();
 </script>
 </body></html>
