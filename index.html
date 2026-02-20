@@ -106,8 +106,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 3rem;display:
 .service-name{font-family:var(--font-display);font-size:1.4rem;font-weight:600;letter-spacing:-.02em;margin-bottom:1rem}
 .service-desc{font-size:.9rem;line-height:1.6;color:var(--gray)}
 .physics-section{padding:0;border-top:1px solid rgba(230,230,230,.06);position:relative;overflow:hidden}
-.physics-header{padding:6rem 3rem 2rem}
-.physics-container{position:relative;width:100%;height:80vh;overflow:hidden;cursor:none}
+.physics-container{position:relative;width:100%;height:53vh;overflow:hidden;pointer-events:none}
+.physics-container canvas{pointer-events:none}
+.physics-body{pointer-events:auto}
 .physics-container canvas{display:block;width:100%;height:100%}
 .physics-body{position:absolute;user-select:none;-webkit-user-drag:none;cursor:none}
 .physics-body img{width:100%;height:100%;pointer-events:none}.contact{padding:10rem 3rem;text-align:center;position:relative}
@@ -198,7 +199,6 @@ footer span{font-family:var(--font-mono);font-size:.65rem;text-transform:upperca
 <div class="service-card reveal reveal-delay-3"><div class="service-number">04</div><div class="service-name">Environmental</div><div class="service-desc">Signage, wayfinding, billboard design, vehicle wraps, and spatial graphics that bring brands into the physical world.</div></div>
 </div></section>
 <section class="physics-section" id="physicsSection">
-<div class="physics-header"><div class="section-label">Selected Clients</div></div>
 <div class="physics-container" id="physicsContainer"></div>
 </section>
 <section class="contact" id="contact">
@@ -290,7 +290,7 @@ const w=container.clientWidth;
 const isMobile=w<768;
 const count=assets.length;
 const baseSize=isMobile?w/3:w/count;
-return Math.min(Math.max(baseSize,80),200);
+return Math.min(Math.max(baseSize,80),200)*2.5;
 }
 
 function init(){
@@ -347,6 +347,27 @@ constraint:{stiffness:0.6,damping:0.1,render:{visible:false}}
 });
 Composite.add(engine.world,mouseConstraint);
 
+mouse.element.removeEventListener('mousewheel',mouse.mousewheel);
+mouse.element.removeEventListener('DOMMouseScroll',mouse.mousewheel);
+
+container.style.pointerEvents='none';
+domElements.forEach(function(el){el.style.pointerEvents='auto';el.style.cursor='grab';});
+
+container.addEventListener('mousedown',function(e){
+var rect=container.getBoundingClientRect();
+mouse.position.x=e.clientX-rect.left;
+mouse.position.y=e.clientY-rect.top;
+mouse.button=0;
+},{passive:true});
+container.addEventListener('mousemove',function(e){
+var rect=container.getBoundingClientRect();
+mouse.position.x=e.clientX-rect.left;
+mouse.position.y=e.clientY-rect.top;
+},{passive:true});
+container.addEventListener('mouseup',function(){
+mouse.button=-1;
+},{passive:true});
+
 container.addEventListener('touchstart',function(e){
 if(e.touches.length===1){
 const rect=container.getBoundingClientRect();
@@ -355,9 +376,9 @@ mouse.position.x=(touch.clientX-rect.left)*(mouse.pixelRatio||1);
 mouse.position.y=(touch.clientY-rect.top)*(mouse.pixelRatio||1);
 mouse.button=0;
 }
-},{passive:false});
+},{passive:true});
 container.addEventListener('touchmove',function(e){
-if(mouseConstraint.body){e.preventDefault();}
+if(mouseConstraint.body&&e.cancelable){e.preventDefault();}
 if(e.touches.length===1){
 const rect=container.getBoundingClientRect();
 const touch=e.touches[0];
