@@ -41,10 +41,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 3rem;display:
 .hero-info{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.05em;color:var(--gray);line-height:1.8}
 .hero-scroll{display:flex;flex-direction:column;align-items:center;gap:.5rem;font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--gray)}
 .hero-scroll .arrow{width:1px;height:60px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollPulse 2s ease infinite}
-@keyframes scrollPulse{0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:.4;transform:scaleY(.6)}}.marquee-section{padding:3rem 0;border-top:1px solid rgba(245,240,235,.08);border-bottom:1px solid rgba(245,240,235,.08);overflow:hidden}
-.marquee-track{display:flex;animation:marquee 25s linear infinite;width:max-content}
-.marquee-track span{font-family:var(--font-display);font-size:clamp(1.2rem,3vw,2.5rem);font-weight:600;white-space:nowrap;padding:0 2rem;color:rgba(245,240,235,.15);letter-spacing:-.02em}
-.marquee-track span .dot{display:inline-block;width:8px;height:8px;background:var(--accent);border-radius:50%;margin:0 2rem;vertical-align:middle}
+@keyframes scrollPulse{0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:.4;transform:scaleY(.6)}}.marquee-section{padding:1.2rem 0;background:var(--accent);overflow:hidden;border:none}
+.marquee-track{display:flex;animation:marquee 20s linear infinite;width:max-content}
+.marquee-track span{font-family:var(--font-display);font-size:clamp(1.2rem,3vw,2.5rem);font-weight:800;white-space:nowrap;padding:0 4rem;color:var(--black);letter-spacing:-.02em}
 @keyframes marquee{to{transform:translateX(-50%)}}
 .section-header{padding:8rem 3rem 4rem}
 .section-label{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);margin-bottom:1rem;display:flex;align-items:center;gap:1rem}
@@ -145,7 +144,7 @@ footer span{font-family:var(--font-mono);font-size:.65rem;text-transform:upperca
 <div class="hero-scroll"><span>Scroll</span><div class="arrow"></div></div>
 </div>
 </section>
-<div class="marquee-section"><div class="marquee-track"><span>Design is how it works, not just how it looks <span class="dot"></span> Every brand has a story worth telling <span class="dot"></span> From pixel to billboard <span class="dot"></span></span><span>Design is how it works, not just how it looks <span class="dot"></span> Every brand has a story worth telling <span class="dot"></span> From pixel to billboard <span class="dot"></span></span></div></div><section id="work">
+<div class="marquee-section"><div class="marquee-track"><span>Design is how it works, not just how it looks — Every brand has a story worth telling — From pixel to billboard, from screen to street</span><span>Design is how it works, not just how it looks — Every brand has a story worth telling — From pixel to billboard, from screen to street</span></div></div><section id="work">
 <div class="section-header"><div class="section-label">Selected Work</div><h2 class="section-title">Projects that define<br>the craft</h2></div>
 <div class="gallery">
 <div class="gallery-item ar-portrait" data-title="Konya Metropolitan Municipality" data-category="Brand Identity &amp; Environmental Graphics" data-desc="Complete visual identity system for one of Turkey's largest metropolitan municipalities. Designed environmental graphics spanning city billboards, transit systems, public buildings and official communications — creating a unified civic brand language across all touchpoints." data-client="Konya Büyükşehir Belediyesi" data-role="Brand Identity, Environmental Graphics" data-year="2023" data-img1="projects/konya-1.jpg" data-img2="projects/konya-2.jpg" data-img3="projects/konya-3.jpg"><div class="gallery-cover" style="background:#1a5c3a"><img src="projects/konya-cover.jpg" alt="Konya Metropolitan Municipality"></div><div class="gallery-info"><span class="gallery-cat">Brand Identity</span><h3 class="gallery-name">Konya Metropolitan Municipality</h3></div></div>
