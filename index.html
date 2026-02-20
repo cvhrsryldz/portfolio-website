@@ -6,10 +6,14 @@
 <title>Cevher Sarıyıldız — Graphic Designer & Art Director</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
+@font-face{font-family:'Roc Grotesk';src:url('fonts/RocGrotesk-Regular.woff2') format('woff2'),url('fonts/RocGrotesk-Regular.woff') format('woff');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Roc Grotesk';src:url('fonts/RocGrotesk-Medium.woff2') format('woff2'),url('fonts/RocGrotesk-Medium.woff') format('woff');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Roc Grotesk';src:url('fonts/RocGrotesk-Bold.woff2') format('woff2'),url('fonts/RocGrotesk-Bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Roc Grotesk';src:url('fonts/RocGrotesk-ExtraBold.woff2') format('woff2'),url('fonts/RocGrotesk-ExtraBold.woff') format('woff');font-weight:800;font-style:normal;font-display:swap}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--black:#0a0a0a;--white:#f5f0eb;--cream:#e8e0d8;--accent:#ff4d00;--accent2:#6c3ce0;--gray:#888;--font-display:'Syne',sans-serif;--font-body:'Space Grotesk',sans-serif;--font-mono:'Space Mono',monospace}
+:root{--black:#191919;--white:#f5f0eb;--cream:#e8e0d8;--accent:#ff4d00;--accent2:#191919;--gray:#888;--font-display:'Roc Grotesk',sans-serif;--font-body:'Roc Grotesk',sans-serif;--font-mono:'Space Mono',monospace}
 html{scroll-behavior:smooth;font-size:16px;overflow-x:hidden}
 body{background:var(--black);color:var(--white);font-family:var(--font-body);cursor:none;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none;cursor:none}img{display:block;max-width:100%}
@@ -23,7 +27,7 @@ a{color:inherit;text-decoration:none;cursor:none}img{display:block;max-width:100
 .loader.done{animation:loaderExit 1s cubic-bezier(.19,1,.22,1) forwards}
 @keyframes loaderReveal{to{transform:translateY(0)}}@keyframes loaderLine{to{width:200px}}@keyframes loaderExit{to{clip-path:inset(0 0 100% 0);opacity:0;pointer-events:none}}.noise{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");background-repeat:repeat;background-size:256px}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;mix-blend-mode:difference}
-.nav-logo{font-family:var(--font-display);font-weight:800;font-size:1.2rem;letter-spacing:-.02em}
+.nav-logo{display:flex;align-items:center}.nav-logo svg{width:32px;height:32px;fill:var(--white)}
 .nav-links{display:flex;gap:2.5rem;list-style:none}
 .nav-links a{font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;position:relative;padding-bottom:2px}
 .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--white);transition:width .4s cubic-bezier(.19,1,.22,1)}
@@ -65,7 +69,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 3rem;display:
 .gallery-name{font-family:var(--font-display);font-size:1.1rem;font-weight:600;letter-spacing:-.02em;color:#fff}
 .project-modal{position:fixed;inset:0;z-index:1000;background:var(--black);overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .5s cubic-bezier(.19,1,.22,1)}
 .project-modal.active{opacity:1;pointer-events:all}
-.modal-close{position:fixed;top:2rem;left:2rem;z-index:1001;background:rgba(10,10,10,.6);backdrop-filter:blur(10px);border:1px solid rgba(245,240,235,.15);color:var(--white);font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;padding:.8rem 1.5rem;border-radius:100px;cursor:none;transition:border-color .3s,background .3s;display:flex;align-items:center;gap:.5rem}
+.modal-close{position:fixed;top:2rem;left:2rem;z-index:1001;background:rgba(25,25,25,.6);backdrop-filter:blur(10px);border:1px solid rgba(245,240,235,.15);color:var(--white);font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;padding:.8rem 1.5rem;border-radius:100px;cursor:none;transition:border-color .3s,background .3s;display:flex;align-items:center;gap:.5rem}
 .modal-close:hover{border-color:var(--accent);background:rgba(255,77,0,.15)}
 .modal-hero{width:100%;height:70vh;position:relative;overflow:hidden;background:#1a1a1a}
 .modal-hero img{width:100%;height:100%;object-fit:cover;display:block}
@@ -88,18 +92,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 3rem;display:
 .about-gif-container canvas{width:60%;height:auto;display:block;-webkit-mask-image:linear-gradient(to right,transparent,black 12%,black 88%,transparent),linear-gradient(to bottom,transparent,black 3%,black 97%,transparent);-webkit-mask-composite:destination-in;mask-image:linear-gradient(to right,transparent,black 12%,black 88%,transparent),linear-gradient(to bottom,transparent,black 3%,black 97%,transparent);mask-composite:intersect}
 .about-gif-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;color:#888;background:transparent;z-index:2;transition:opacity .5s ease}
 .about-gif-loading.hidden{opacity:0;pointer-events:none}
-.about-right .big-quote{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.5rem);font-weight:700;line-height:1.2;letter-spacing:-.03em;margin-bottom:3rem;color:#0a0a0a}
+.about-right .big-quote{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.5rem);font-weight:700;line-height:1.2;letter-spacing:-.03em;margin-bottom:3rem;color:var(--black)}
 .about-right .big-quote .highlight{color:var(--accent)}
 .about-right{padding-top:1rem}
 .about-right p{font-size:1.05rem;line-height:1.8;color:#333;margin-bottom:2rem;opacity:.85}
-.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;padding-top:3rem;border-top:1px solid rgba(10,10,10,.12)}
+.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;padding-top:3rem;border-top:1px solid rgba(25,25,25,.12)}
 .stat-item .stat-number{font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--accent);letter-spacing:-.03em}
 .stat-item .stat-label{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:#666;margin-top:.3rem}
 .services{padding:0 3rem 10rem}
 .services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(245,240,235,.06);margin-top:4rem}
 .service-card{background:var(--black);padding:3rem 2rem;transition:background .4s ease;position:relative;overflow:hidden}
 .service-card::before{content:'';position:absolute;bottom:0;left:0;width:0;height:3px;background:var(--accent);transition:width .6s cubic-bezier(.19,1,.22,1)}
-.service-card:hover::before{width:100%}.service-card:hover{background:#111}
+.service-card:hover::before{width:100%}.service-card:hover{background:#222}
 .service-number{font-family:var(--font-mono);font-size:.65rem;color:var(--accent);letter-spacing:.15em;margin-bottom:2rem}
 .service-name{font-family:var(--font-display);font-size:1.4rem;font-weight:600;letter-spacing:-.02em;margin-bottom:1rem}
 .service-desc{font-size:.9rem;line-height:1.6;color:var(--gray)}
@@ -117,6 +121,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 3rem;display:
 .contact-links a:hover{color:var(--accent)}
 footer{padding:2rem 3rem;border-top:1px solid rgba(245,240,235,.06);display:flex;justify-content:space-between;align-items:center}
 footer span{font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray)}
+.footer-logo svg{width:120px;height:auto;fill:var(--gray);opacity:.5}
 .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s cubic-bezier(.19,1,.22,1)}
 .reveal.visible{opacity:1;transform:translateY(0)}
 .reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}
@@ -129,7 +134,7 @@ footer span{font-family:var(--font-mono);font-size:.65rem;text-transform:upperca
 <div class="loader" id="loader"><div class="loader-text"><span style="animation-delay:0s">C</span><span style="animation-delay:.05s">E</span><span style="animation-delay:.1s">V</span><span style="animation-delay:.15s">H</span><span style="animation-delay:.2s">E</span><span style="animation-delay:.25s">R</span></div><div class="loader-line"></div></div>
 <div class="noise"></div>
 <div class="cursor" id="cursor"></div>
-<div class="cursor-follower" id="cursorFollower"></div><nav><a href="#" class="nav-logo">CS.</a><ul class="nav-links"><li><a href="#work">Work</a></li><li><a href="#about">About</a></li><li><a href="#services">Services</a></li><li><a href="#contact">Contact</a></li></ul><button class="nav-menu-btn" id="menuBtn">Menu</button></nav>
+<div class="cursor-follower" id="cursorFollower"></div><nav><a href="#" class="nav-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 269.5 269.48"><path d="M134.74,255.57c-66.98,0-121.41-54.79-120.82-121.91.57-65.08,53.22-118.39,118.29-119.73,60.63-1.25,111.5,42.42,121.55,99.94h14.1C257.83,49.62,202.23.26,135.27,0,61.06-.29.19,60.19,0,134.39c-.19,74.46,60.32,135.09,134.74,135.09,67.2,0,123.07-49.44,133.12-113.87h-14.1c-9.91,56.71-59.51,99.96-119.02,99.96Z"/><path d="M269.33,127.79h-100.38c-9.85,0-16.01-10.66-11.08-19.2l36.22-62.74c-3.85-2.57-7.86-4.91-12.03-6.98l-36.23,62.76c-4.93,8.53-17.24,8.53-22.17,0l-36.23-62.76c-4.17,2.07-8.19,4.4-12.03,6.98l36.22,62.74c4.93,8.53-1.23,19.2-11.08,19.2H28.04c-.15,2.3-.22,4.62-.22,6.96s.08,4.65.22,6.96h72.48c9.85,0,16.01,10.66,11.08,19.2l-36.22,62.74c3.85,2.57,7.86,4.91,12.03,6.98l36.23-62.76c4.93-8.53,17.24-8.53,22.17,0l36.23,62.76c4.17-2.07,8.19-4.4,12.03-6.98l-36.22-62.74c-4.93-8.53,1.23-19.2,11.08-19.2h100.38c.11-2.3.17-4.63.17-6.96s-.06-4.65-.17-6.95Z"/></svg></a><ul class="nav-links"><li><a href="#work">Work</a></li><li><a href="#about">About</a></li><li><a href="#services">Services</a></li><li><a href="#contact">Contact</a></li></ul><button class="nav-menu-btn" id="menuBtn">Menu</button></nav>
 <section class="hero" id="hero">
 <div class="hero-bg-text">DESIGN</div>
 <div style="position:absolute;top:20%;right:10%;width:300px;height:300px;background:var(--accent);border-radius:50%;filter:blur(150px);opacity:.08;pointer-events:none"></div>
@@ -185,7 +190,7 @@ footer span{font-family:var(--font-mono);font-size:.65rem;text-transform:upperca
 <h2 class="contact-title reveal"><a href="mailto:cvhrsryldz96@gmail.com">Say hello.</a></h2>
 <div class="contact-links reveal"><a href="mailto:cvhrsryldz96@gmail.com">Email</a><a href="https://github.com/cvhrsryldz" target="_blank" rel="noopener">GitHub</a><a href="#" target="_blank" rel="noopener">Behance</a><a href="#" target="_blank" rel="noopener">Instagram</a></div>
 </section>
-<footer><span>&copy; 2026 Cevher Sarıyıldız</span><span>Design &amp; Development</span></footer>
+<footer><span>&copy; 2026 Cevher Sarıyıldız</span><div class="footer-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 269.5 269.48"><path d="M134.74,255.57c-66.98,0-121.41-54.79-120.82-121.91.57-65.08,53.22-118.39,118.29-119.73,60.63-1.25,111.5,42.42,121.55,99.94h14.1C257.83,49.62,202.23.26,135.27,0,61.06-.29.19,60.19,0,134.39c-.19,74.46,60.32,135.09,134.74,135.09,67.2,0,123.07-49.44,133.12-113.87h-14.1c-9.91,56.71-59.51,99.96-119.02,99.96Z"/><path d="M269.33,127.79h-100.38c-9.85,0-16.01-10.66-11.08-19.2l36.22-62.74c-3.85-2.57-7.86-4.91-12.03-6.98l-36.23,62.76c-4.93,8.53-17.24,8.53-22.17,0l-36.23-62.76c-4.17,2.07-8.19,4.4-12.03,6.98l36.22,62.74c4.93,8.53-1.23,19.2-11.08,19.2H28.04c-.15,2.3-.22,4.62-.22,6.96s.08,4.65.22,6.96h72.48c9.85,0,16.01,10.66,11.08,19.2l-36.22,62.74c3.85,2.57,7.86,4.91,12.03,6.98l36.23-62.76c4.93-8.53,17.24-8.53,22.17,0l36.23,62.76c4.17-2.07,8.19-4.4,12.03-6.98l-36.22-62.74c-4.93-8.53,1.23-19.2,11.08-19.2h100.38c.11-2.3.17-4.63.17-6.96s-.06-4.65-.17-6.95Z"/></svg></div><span>Design &amp; Development</span></footer>
 <script>
 window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('loader').classList.add('done');setTimeout(()=>{document.querySelectorAll('.hero-title .line span').forEach((el,i)=>{setTimeout(()=>el.classList.add('visible'),i*200)})},300)},2200)});
 const cursor=document.getElementById('cursor'),follower=document.getElementById('cursorFollower');let mouseX=0,mouseY=0,posX=0,posY=0;
