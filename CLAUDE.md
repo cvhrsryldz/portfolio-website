@@ -27,8 +27,9 @@ portfolio-website/
 ├── README.md           # Minimal project description
 ├── CLAUDE.md           # This file
 │
-├── hero-video.mp4      # Hero background video (24.2MB)
+├── hero-video.mp4      # Hero background video (~24MB)
 ├── aboutme.gif         # Scroll-synced animated GIF (9.3MB)
+├── around-the-world.mp3 # Hero radio player audio — Daft Punk (5.5MB)
 │
 ├── Logo.svg            # Full logo
 ├── Logomark.svg        # Icon-only logo mark
@@ -74,7 +75,7 @@ Standalone content management interface. Features:
 |-------|---------|----------|-------------|
 | 1 | Loader | `.loader` | Spinning logo animation, 2.2s delay, clip-path exit |
 | 2 | Navigation | `nav` | Fixed top bar, logo + links, hamburger on mobile |
-| 3 | Hero | `.hero` | Fullscreen video background, title with stroke/accent text |
+| 3 | Hero | `.hero` | Fullscreen video background, title with stroke/accent text, radio audio player |
 | 4 | Marquee | `.marquee-section` | Infinite horizontal scrolling text banner |
 | 5 | Gallery | `.gallery` | 20 project cards in 3-column grid |
 | 6 | Project Modal | `.project-modal` | Fullscreen overlay for project details |
@@ -117,7 +118,7 @@ Standalone content management interface. Features:
 - Monospace: Space Mono (400, 700) — used for labels, nav, metadata
 
 ### Key CSS Patterns
-- `mix-blend-mode: difference` on nav and cursor
+- `mix-blend-mode: difference` on nav and cursor (nav switches to `normal` on marquee and AI sections via `nav-dark` class)
 - `cursor: none` globally (custom cursor replaces default)
 - `backdrop-filter: blur()` on modal close button
 - `-webkit-text-stroke` for outlined hero text
@@ -161,9 +162,18 @@ Standalone content management interface. Features:
 - Generated credits grid and gallery images
 - Scroll lock on body when open
 
+### Hero Radio Player
+- `<audio>` element with `loop` plays `around-the-world.mp3` (Daft Punk — Around The World)
+- Audio is **paused by default** — user clicks `.radio-btn` to toggle play/pause
+- Pulsing double-ring indicator (`@keyframes radioPulse`) draws attention when paused
+- 3 equalizer bars (`@keyframes eqBounce`) animate when playing
+- `.radio-btn.playing` class toggles visual state (accent border, animated bars, pulse stops)
+- Positioned in `.hero-bottom` between hero-info and hero-scroll
+
 ### Navigation
 - Smooth scroll via `scrollIntoView({ behavior: 'smooth' })`
 - Mobile hamburger toggle (`.nav-links.open` class)
+- `nav-dark` class applied via IntersectionObserver on marquee and AI sections (switches blend mode to normal)
 
 ## Key JavaScript Functions
 
@@ -204,7 +214,7 @@ A local HTTP server is recommended for proper CORS handling of assets (GIF fetch
 ### Important Caveats
 - **CSS/JS are minified inline** — edits to `index.html` styles require working with minified code
 - **Font files not in repo** — `fonts/` directory has only `.gitkeep`; Roc Grotesk WOFF2/WOFF files must be added separately
-- **Large media files** — `hero-video.mp4` (24.2MB) and `aboutme.gif` (9.3MB) are committed to repo
+- **Large media files** — `hero-video.mp4` (~24MB), `aboutme.gif` (9.3MB), and `around-the-world.mp3` (5.5MB) are committed to repo
 - **No `.gitignore`** — all files are tracked
 - **Admin panel generates full HTML** — changes made directly to `index.html` may be overwritten if admin panel is used to regenerate
 - **No testing framework** — manual browser testing only
