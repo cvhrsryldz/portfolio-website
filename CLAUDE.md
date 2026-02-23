@@ -11,7 +11,7 @@ Personal portfolio website for Cevher Sarıyıldız (Art Director & Prompt Engin
 | Markup | HTML5 (semantic) |
 | Styling | Vanilla CSS (inline in `<style>` block) |
 | Scripting | Vanilla JavaScript (inline `<script>` blocks) |
-| Physics Engine | Matter.js v0.20.0 (CDN, deferred, SRI hash) |
+| Physics Engine | Matter.js v0.20.0 (CDN, SRI hash) |
 | Fonts | Roc Grotesk (local WOFF2/WOFF), Space Mono (Google Fonts CDN) |
 | Deployment | GitHub Pages (static) |
 
@@ -88,7 +88,7 @@ Standalone content management interface (client-side only). Can export/import JS
 | 8 | About | `#about` | Split layout: scroll-synced video + bio (7 paragraphs) + stats |
 | 9 | Services | `#services` | 6 service cards in 2-column grid with descriptions |
 | 10 | AI Section | `.ai-section` | 6 AI tool icons with tooltips, floating hero, scrolling code block |
-| 11 | Physics | `.physics-section` | Matter.js interactive playground with 16 draggable SVGs (8 original + 8 recolored) |
+| 11 | Physics | `.physics-section` | Matter.js interactive playground with 16 draggable SVGs, "Drag & Drop for Fun" label, accent divider to contact |
 | 12 | Contact | `#contact` | CTA with email link and social profiles |
 | 13 | Footer | `footer` | Copyright and credits |
 
@@ -159,18 +159,22 @@ Projects with static covers: all others (use `data-cover` + `<img>` in `.gallery
 
 ### Gallery & Modal
 - **Video Rollover**: Items with `data-video` get `<video>` elements created via JS, play on hover
-- **Video preload**: `metadata` (not `auto`) to save bandwidth
+- **Video preload**: `auto` for thumbnail frame visibility at timecodes
 - **Project Modal**: Reads `data-*` attributes, shows colored hero area, credits grid, gallery images/videos
 - **View More**: First 6 items visible, rest shown on click
 
 ### About Section
-- Scroll-synced `<video>` (aboutme.mp4) using `currentTime` based on scroll position
+- Scroll-synced `<video>` (about-video.mp4) using `currentTime` based on scroll position
 - Lazy-initialized via IntersectionObserver
 
 ### Matter.js Physics
 - Lazy-initialized when section scrolls into view
-- 16 bodies (8 original + 8 recolored SVGs) spawned above viewport
+- 16 bodies (8 original + 8 recolored SVGs) spawned simultaneously above viewport
+- Each body gets randomized angle, velocity, angular velocity, and physics properties (restitution, friction, frictionAir)
+- Gravity: 0.9 (softer fall)
 - Mouse/touch drag interaction
+- "Drag & Drop for Fun" label with hand icon (radio-style) at bottom-right
+- Accent yellow border-bottom separates physics from contact section
 - Fixed timestep physics loop via requestAnimationFrame
 
 ### Navigation
@@ -185,7 +189,8 @@ Projects with static covers: all others (use `data-cover` + `<img>` in `.gallery
 - Twitter Card meta tags
 - `<link rel="icon">` using Logomark.svg
 - `<link rel="canonical">`
-- Matter.js CDN loaded with `defer` and `integrity` (SRI hash)
+- Matter.js CDN loaded with `integrity` (SRI hash)
+- Download protection: `controlsList="nodownload"` on videos, context menu blocked on media, drag prevention on images
 
 ## Contact Info (Hardcoded)
 
@@ -205,7 +210,7 @@ A local HTTP server is required for proper CORS handling of video/SVG assets.
 ### Important Caveats
 - **CSS/JS are inline** — edits require working directly in `index.html`
 - **Font files not in repo** — `fonts/` has only `.gitkeep`; Roc Grotesk files must be added separately
-- **Large media files** — hero-video.mp4 (~24MB), aboutme.mp4, around-the-world.mp3 are in repo
+- **Large media files** — hero-bg.mp4 (~24MB), about-video.mp4, hero-audio.mp3 are in repo
 - **No `.gitignore`** — all files are tracked
 - **Admin panel generates full HTML** — direct `index.html` edits may be overwritten by admin regeneration
 - **No testing framework** — manual browser testing only
