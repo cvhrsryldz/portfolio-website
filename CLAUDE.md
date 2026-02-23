@@ -31,7 +31,8 @@ portfolio-website/
 ├── hero-audio.mp3      # Hero radio player audio — Daft Punk (5.5MB)
 │
 ├── logo.svg            # Full logo
-├── logomark.svg        # Icon-only logo mark (also used as favicon)
+├── logomark.svg        # Icon-only logo mark
+├── favicon.svg         # Favicon (yellow bg + logomark)
 ├── logotype.svg        # Text-only logotype
 ├── ai-hero.png         # AI section hero image
 ├── ai-*.svg            # AI tool icons (chatgpt, claude, midjourney, firefly, higgsfield, gemini)
@@ -187,7 +188,7 @@ Projects with static covers: all others (use `data-cover` + `<img>` in `.gallery
 - `<meta name="description">` for search engines
 - Open Graph tags (`og:title`, `og:description`, `og:image`, `og:url`)
 - Twitter Card meta tags
-- `<link rel="icon">` using Logomark.svg
+- `<link rel="icon">` using favicon.svg (yellow background + logomark)
 - `<link rel="canonical">`
 - Matter.js CDN loaded with `integrity` (SRI hash)
 - Download protection: `controlsList="nodownload"` on videos, context menu blocked on media, drag prevention on images
