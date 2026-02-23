@@ -84,7 +84,7 @@ Standalone content management interface (client-side only). Can export/import JS
 | 4 | Back to Top | `.back-to-top` | Fixed bottom-right button, appears after 1vh scroll |
 | 5 | Marquee | `.marquee-section` | Francis Bacon quote, 4 span copies, 30s animation |
 | 6 | Gallery | `.gallery` | 18 project cards in 3-column grid, video rollover on hover |
-| 7 | Project Modal | `.project-modal` | Fullscreen overlay with hero color, credits, gallery. Escape key to close |
+| 7 | Project Modal | `.project-modal` | Fullscreen overlay with title, credits, gallery. Escape key to close |
 | 8 | About | `#about` | Split layout: scroll-synced video + bio (7 paragraphs) + stats |
 | 9 | Services | `#services` | 6 service cards in 2-column grid with descriptions |
 | 10 | AI Section | `.ai-section` | 6 AI tool icons with tooltips, floating hero, scrolling code block |
@@ -160,7 +160,7 @@ Projects with static covers: all others (use `data-cover` + `<img>` in `.gallery
 ### Gallery & Modal
 - **Video Rollover**: Items with `data-video` get `<video>` elements created via JS, play on hover
 - **Video preload**: `auto` for thumbnail frame visibility at timecodes
-- **Project Modal**: Reads `data-*` attributes, shows colored hero area, credits grid, gallery images/videos
+- **Project Modal**: Reads `data-*` attributes, shows title, category, description, credits grid, gallery images/videos
 - **View More**: First 6 items visible, rest shown on click
 
 ### About Section
