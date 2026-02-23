@@ -144,8 +144,15 @@ Projects with static covers: all others (use `data-cover` + `<img>` in `.gallery
 | `max-width: 768px` | Tablet / mobile |
 | `max-width: 480px` | Small mobile |
 
+### Mobile-Specific Overrides (768px)
+- **Hero**: Title/subtitle centered, scroll indicator hidden, clock hidden, radio player centered below
+- **Gallery**: Single column, videos autoplay on scroll via IntersectionObserver (no hover on mobile)
+- **AI Section**: Hidden (`display:none`) — desktop only
+- **Physics**: 56vh height, 10 bodies (vs 16 desktop), smaller base size (55-65px vs 115px), drag label hidden, resize handler ignores address bar changes, one-time IntersectionObserver init
+- **Loader**: Opacity transition instead of clip-path animation (Safari compatibility), 4s fallback timeout
+
 ### Accessibility
-- `@media (prefers-reduced-motion: reduce)` disables all animations
+- `@media (prefers-reduced-motion: reduce)` disables all animations (including loader, marquee — users must disable this iOS setting for full experience)
 - `-webkit-backdrop-filter` prefix on blur elements for Safari
 - `loading="lazy"` on all gallery cover images
 - Escape key closes project modal
@@ -159,7 +166,7 @@ Projects with static covers: all others (use `data-cover` + `<img>` in `.gallery
 - **Back to Top**: Fixed button appears after scrolling past 1 viewport height
 
 ### Gallery & Modal
-- **Video Rollover**: Items with `data-video` get `<video>` elements created via JS, play on hover
+- **Video Rollover**: Items with `data-video` get `<video>` elements created via JS, play on hover (desktop) or on scroll into view (mobile via IntersectionObserver)
 - **Video preload**: `auto` for thumbnail frame visibility at timecodes
 - **Project Modal**: Reads `data-*` attributes, shows title, category, description, credits grid, gallery images/videos
 - **View More**: First 6 items visible, rest shown on click
@@ -169,14 +176,16 @@ Projects with static covers: all others (use `data-cover` + `<img>` in `.gallery
 - Lazy-initialized via IntersectionObserver
 
 ### Matter.js Physics
-- Lazy-initialized when section scrolls into view
-- 16 bodies (8 original + 8 recolored SVGs) spawned simultaneously above viewport
+- Lazy-initialized once when section scrolls into view (one-time IntersectionObserver, disconnects after init)
+- Desktop: 16 bodies (8 original + 8 recolored SVGs), 115px base height
+- Mobile: 10 bodies, 55-65px base height, touch-action:none on canvas for drag
 - Each body gets randomized angle, velocity, angular velocity, and physics properties (restitution, friction, frictionAir)
 - Gravity: 0.9 (softer fall)
 - Mouse/touch drag interaction
-- "Drag & Drop for Fun" label with hand icon (radio-style) at bottom-right
+- "Drag & Drop for Fun" label with hand icon (desktop only, hidden on mobile)
 - Accent yellow border-bottom separates physics from contact section
 - Fixed timestep physics loop via requestAnimationFrame
+- Resize handler only triggers on width change (ignores mobile address bar show/hide)
 
 ### Navigation
 - Smooth scroll via `scrollIntoView`
@@ -215,3 +224,6 @@ A local HTTP server is required for proper CORS handling of video/SVG assets.
 - **No `.gitignore`** — all files are tracked
 - **Admin panel generates full HTML** — direct `index.html` edits may be overwritten by admin regeneration
 - **No testing framework** — manual browser testing only
+- **Custom domain** — `cevhersariyildiz.com` via güzel.net DNS, GitHub Pages with HTTPS
+- **Loader uses opacity transition** — clip-path animation removed due to mobile Safari incompatibility
+- **iOS "Reduce Motion"** — if enabled, kills all CSS animations (loader, marquee, etc.)
