@@ -26,16 +26,16 @@ portfolio-website/
 ├── README.md           # Minimal project description
 ├── CLAUDE.md           # This file
 │
-├── hero-video.mp4      # Hero background video (~24MB)
-├── aboutme.mp4         # Scroll-synced about video
-├── around-the-world.mp3 # Hero radio player audio — Daft Punk (5.5MB)
+├── hero-bg.mp4         # Hero background video (~24MB)
+├── about-video.mp4     # Scroll-synced about video
+├── hero-audio.mp3      # Hero radio player audio — Daft Punk (5.5MB)
 │
-├── Logo.svg            # Full logo
-├── Logomark.svg        # Icon-only logo mark (also used as favicon)
-├── Logotype.svg        # Text-only logotype
-├── asset-cevher.png    # AI section hero image
+├── logo.svg            # Full logo
+├── logomark.svg        # Icon-only logo mark (also used as favicon)
+├── logotype.svg        # Text-only logotype
+├── ai-hero.png         # AI section hero image
 ├── ai-*.svg            # AI tool icons (chatgpt, claude, midjourney, firefly, higgsfield, gemini)
-├── Asset1-8.svg        # Physics playground SVG assets (8 files)
+├── physics-asset-[1-8].svg # Physics playground SVG assets (8 files)
 │
 ├── fonts/              # Custom font files (Roc Grotesk family)
 │   └── .gitkeep        # Font files not committed to repo
