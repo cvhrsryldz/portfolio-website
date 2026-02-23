@@ -1,8 +1,8 @@
-# Portfolio Website — Cevher Sariyildiz
+# Portfolio Website — Cevher Sarıyıldız
 
 ## Project Overview
 
-Personal portfolio website for Cevher Sariyildiz (Graphic Designer & Art Director). Static single-page site deployed on **GitHub Pages**. No build system, no bundler, no package manager — pure HTML/CSS/JavaScript served directly.
+Personal portfolio website for Cevher Sarıyıldız (Art Director & Prompt Engineer). Static single-page site deployed on **GitHub Pages**. No build system, no bundler, no package manager — pure HTML/CSS/JavaScript served directly.
 
 ## Tech Stack
 
@@ -11,8 +11,7 @@ Personal portfolio website for Cevher Sariyildiz (Graphic Designer & Art Directo
 | Markup | HTML5 (semantic) |
 | Styling | Vanilla CSS (inline in `<style>` block) |
 | Scripting | Vanilla JavaScript (inline `<script>` blocks) |
-| Physics Engine | Matter.js v0.20.0 (CDN) |
-| GIF Decoder | gifuct-js v2.1.2 (CDN, ES module) |
+| Physics Engine | Matter.js v0.20.0 (CDN, deferred, SRI hash) |
 | Fonts | Roc Grotesk (local WOFF2/WOFF), Space Mono (Google Fonts CDN) |
 | Deployment | GitHub Pages (static) |
 
@@ -22,51 +21,57 @@ Personal portfolio website for Cevher Sariyildiz (Graphic Designer & Art Directo
 
 ```
 portfolio-website/
-├── index.html          # Main portfolio site (~50KB, all CSS/JS inline)
-├── admin.html          # Admin panel for content management (~65KB)
+├── index.html          # Main portfolio site (all CSS/JS inline)
+├── admin.html          # Admin panel for content management
 ├── README.md           # Minimal project description
 ├── CLAUDE.md           # This file
 │
 ├── hero-video.mp4      # Hero background video (~24MB)
-├── aboutme.gif         # Scroll-synced animated GIF (9.3MB)
+├── aboutme.mp4         # Scroll-synced about video
 ├── around-the-world.mp3 # Hero radio player audio — Daft Punk (5.5MB)
 │
 ├── Logo.svg            # Full logo
-├── Logomark.svg        # Icon-only logo mark
+├── Logomark.svg        # Icon-only logo mark (also used as favicon)
 ├── Logotype.svg        # Text-only logotype
-├── Asset1.svg          # Physics playground SVG assets (8 files)
-├── Asset2.svg
-├── Asset3.svg
-├── Asset4.svg
-├── Asset5.svg
-├── Asset6.svg
-├── Asset7.svg
-├── Asset8.svg
+├── asset-cevher.png    # AI section hero image
+├── ai-*.svg            # AI tool icons (chatgpt, claude, midjourney, firefly, higgsfield, gemini)
+├── Asset1-8.svg        # Physics playground SVG assets (8 files)
 │
 ├── fonts/              # Custom font files (Roc Grotesk family)
 │   └── .gitkeep        # Font files not committed to repo
 │
-└── projects/           # Project assets directory (placeholder)
-    └── .gitkeep
+└── projects/           # Project assets (images, videos per project)
+    ├── hayirlicumalar*  # Daha Hayırlı Cumalar
+    ├── annelergunu*     # Bi'Talih - Mother's Day Run
+    ├── nesine*          # Nesine.com
+    ├── iit*             # Invest in Türkiye (DOOH)
+    ├── tt*              # Turkish Technic
+    ├── worldcup*        # Nesine.com - 2022 World Cup
+    ├── fixo*            # Bi'Talih - Fixo
+    ├── derbi*           # Bi'Talih - Derbies
+    ├── ywa*             # Yes!WeAble
+    ├── experimental*    # Experimental Typography
+    ├── invest-sm*       # Invest in Türkiye (Social Media)
+    ├── gametech*        # Gametech
+    ├── informatif*      # What Is Design?
+    ├── shadows*         # Shadows
+    ├── yapali*          # Yapalı
+    ├── aztec*           # Aztec Token
+    ├── ram*             # Ram Robotics
+    └── hb*              # Hepsiburada
 ```
 
 ## Architecture
 
 ### Single-File Approach
-All CSS and JavaScript are **inline within `index.html`**. There are no external `.css` or `.js` files. The CSS is minified; the JS is partially minified. When editing styles or scripts, work directly inside `index.html`.
+All CSS and JavaScript are **inline within `index.html`**. There are no external `.css` or `.js` files. When editing styles or scripts, work directly inside `index.html`.
 
 ### Admin Panel (`admin.html`)
-Standalone content management interface. Features:
-- Form-based editing of all site sections (hero, about, projects, services, contact)
-- **Export/Import JSON** for saving/loading site data
-- **Generate & Download** — produces a new `index.html` with updated content
-- Live preview in new browser tab
-- Dark theme UI with Turkish labels
-- No backend — all client-side
+Standalone content management interface (client-side only). Can export/import JSON and generate new `index.html` files.
 
 ### No Build Pipeline
 - No `package.json`, `tsconfig`, `webpack`, `vite`, or any config files
-- To run locally: open `index.html` in a browser (or use a local HTTP server for proper asset loading)
+- To run locally: `python3 -m http.server 8000`
 - To deploy: push to GitHub, GitHub Pages serves from `main` branch
 
 ## Page Sections (index.html)
@@ -74,16 +79,44 @@ Standalone content management interface. Features:
 | Order | Section | ID/Class | Description |
 |-------|---------|----------|-------------|
 | 1 | Loader | `.loader` | Spinning logo animation, 2.2s delay, clip-path exit |
-| 2 | Navigation | `nav` | Fixed top bar, logo + links, hamburger on mobile |
-| 3 | Hero | `.hero` | Fullscreen video background, title with stroke/accent text, radio audio player |
-| 4 | Marquee | `.marquee-section` | Infinite horizontal scrolling text banner |
-| 5 | Gallery | `.gallery` | 20 project cards in 3-column grid |
-| 6 | Project Modal | `.project-modal` | Fullscreen overlay for project details |
-| 7 | About | `#about` | Split layout: scroll-synced GIF + bio text + stats |
-| 8 | Services | `#services` | 4-column service cards |
-| 9 | Physics | `.physics-section` | Matter.js interactive playground with draggable SVGs |
-| 10 | Contact | `#contact` | CTA with email link and social profiles |
-| 11 | Footer | `footer` | Copyright and credits |
+| 2 | Navigation | `nav` | Fixed top bar, logo + links, hamburger on mobile (`.nav-links.open` class toggle) |
+| 3 | Hero | `.hero` | Fullscreen video bg, logotype image, subtitle, radio player, live clock (Istanbul TZ), scroll indicator |
+| 4 | Back to Top | `.back-to-top` | Fixed bottom-right button, appears after 1vh scroll |
+| 5 | Marquee | `.marquee-section` | Francis Bacon quote, 4 span copies, 30s animation |
+| 6 | Gallery | `.gallery` | 18 project cards in 3-column grid, video rollover on hover |
+| 7 | Project Modal | `.project-modal` | Fullscreen overlay with hero color, credits, gallery. Escape key to close |
+| 8 | About | `#about` | Split layout: scroll-synced video + bio (7 paragraphs) + stats |
+| 9 | Services | `#services` | 6 service cards in 2-column grid with descriptions |
+| 10 | AI Section | `.ai-section` | 6 AI tool icons with tooltips, floating hero, scrolling code block |
+| 11 | Physics | `.physics-section` | Matter.js interactive playground with 16 draggable SVGs (8 original + 8 recolored) |
+| 12 | Contact | `#contact` | CTA with email link and social profiles |
+| 13 | Footer | `footer` | Copyright and credits |
+
+## Gallery Projects (18 total)
+
+| # | Title | Category | Slug |
+|---|-------|----------|------|
+| 1 | Daha Hayırlı Cumalar | Art Project | hayirlicumalar |
+| 2 | Bi'Talih - Mother's Day Run | Brand Activation | annelergunu |
+| 3 | Nesine.com | Social Media Design | nesine |
+| 4 | Invest in Türkiye | DOOH Campaign | iit |
+| 5 | Turkish Technic | Brand Communication | tt |
+| 6 | Nesine.com - 2022 World Cup | Campaign Design | worldcup |
+| 7 | Bi'Talih - Fixo | Character Design | fixo |
+| 8 | Bi'Talih - Derbies | Brand Activation | derbi |
+| 9 | Yes!WeAble | Brand Identity | ywa |
+| 10 | Experimental Typography | Academic Project | experimental |
+| 11 | Invest in Türkiye | Social Media Design | invest-sm |
+| 12 | Gametech | Brand Identity | gametech |
+| 13 | What Is Design? | Content Design | informatif |
+| 14 | Shadows | Cover Art | shadows |
+| 15 | Yapalı | Brand Identity | yapali |
+| 16 | Aztec Token | NFT Project | aztec |
+| 17 | Ram Robotics | Brand Identity | ram |
+| 18 | Hepsiburada | Social Media Design | hb |
+
+Projects with video covers: annelergunu, iit, worldcup, derbi, aztec, hb (use `data-video` attribute).
+Projects with static covers: all others (use `data-cover` + `<img>` in `.gallery-cover`).
 
 ## CSS Conventions
 
@@ -92,12 +125,11 @@ Standalone content management interface. Features:
 --black: #191919;
 --white: #E6E6E6;
 --cream: #AAA239;
---accent: #FFEF00;       /* Primary yellow */
---accent2: #807B40;      /* Olive gold */
+--accent: #FFEF00;
+--accent2: #807B40;
 --gray: #807B40;
 --olive: #555339;
 --gold: #D5C923;
-
 --font-display: 'Roc Grotesk Wide', 'Roc Grotesk', sans-serif;
 --font-body: 'Roc Grotesk', sans-serif;
 --font-mono: 'Space Mono', monospace;
@@ -111,111 +143,69 @@ Standalone content management interface. Features:
 | `max-width: 768px` | Tablet / mobile |
 | `max-width: 480px` | Small mobile |
 
-### Typography
-- Fluid sizing with `clamp()` — e.g., `clamp(3.5rem, 10vw, 9rem)` for hero title
-- Display font: Roc Grotesk Wide (700, 800)
-- Body font: Roc Grotesk (400, 500, 700, 800)
-- Monospace: Space Mono (400, 700) — used for labels, nav, metadata
-
-### Key CSS Patterns
-- `mix-blend-mode: difference` on nav and cursor (nav switches to `normal` on marquee and AI sections via `nav-dark` class)
-- `cursor: none` globally (custom cursor replaces default)
-- `backdrop-filter: blur()` on modal close button
-- `-webkit-text-stroke` for outlined hero text
-- CSS Grid for gallery (`repeat(3, 1fr)`) and service cards
-- `aspect-ratio: 3/4` for gallery items
+### Accessibility
+- `@media (prefers-reduced-motion: reduce)` disables all animations
+- `-webkit-backdrop-filter` prefix on blur elements for Safari
+- `loading="lazy"` on all gallery cover images
+- Escape key closes project modal
+- `aria-label` on icon buttons
 
 ## JavaScript Features
 
-### Custom Cursor
-- 12px accent-colored dot + 40px border follower circle
-- Follower uses `requestAnimationFrame` with easing (`lerp`)
-- Expands on hover over clickable elements
-- Hidden on mobile (`@media max-width: 768px`)
+### Hero Section
+- **Live Clock**: Shows Istanbul time (Europe/Istanbul timezone), updates every second
+- **Radio Player**: Audio toggle with equalizer animation, paused by default
+- **Back to Top**: Fixed button appears after scrolling past 1 viewport height
 
-### Scroll Animations (IntersectionObserver)
-- `.reveal` and `.gallery-item` elements observed
-- Threshold: `0.15`, root margin: `0px 0px -50px 0px`
-- Adds `.visible` class triggering CSS `opacity` + `translateY` transitions
-- Staggered delays via `.reveal-delay-1`, `-2`, `-3`
+### Gallery & Modal
+- **Video Rollover**: Items with `data-video` get `<video>` elements created via JS, play on hover
+- **Video preload**: `metadata` (not `auto`) to save bandwidth
+- **Project Modal**: Reads `data-*` attributes, shows colored hero area, credits grid, gallery images/videos
+- **View More**: First 6 items visible, rest shown on click
 
-### GIF Scroll Sync (gifuct-js)
-- Fetches `aboutme.gif`, decodes all frames into ImageData array
-- Renders frames to a `<canvas>` based on scroll position
-- Frame index: `Math.floor(-scrollOffset * (totalFrames / pixelsPerCycle))`
-- Initialized lazily via IntersectionObserver
+### About Section
+- Scroll-synced `<video>` (aboutme.mp4) using `currentTime` based on scroll position
+- Lazy-initialized via IntersectionObserver
 
-### Matter.js Physics Playground
+### Matter.js Physics
 - Lazy-initialized when section scrolls into view
-- Creates engine with `gravity.y = 1.5`
-- 8 SVG assets as physics bodies (rectangle collision shapes)
-- Mouse constraint for drag interaction
-- Touch events supported (passive listeners)
-- Canvas rendering synced with DOM transforms via `requestAnimationFrame`
-- Resizes and reinitializes on window resize
-- Cleans up when scrolled out of view
-
-### Project Modal
-- Click gallery item opens fullscreen modal
-- Reads project data from `data-*` attributes on gallery items
-- Color-shifted hero background using `shiftColor()` utility
-- Generated credits grid and gallery images
-- Scroll lock on body when open
-
-### Hero Radio Player
-- `<audio>` element with `loop` plays `around-the-world.mp3` (Daft Punk — Around The World)
-- Audio is **paused by default** — user clicks `.radio-btn` to toggle play/pause
-- Pulsing double-ring indicator (`@keyframes radioPulse`) draws attention when paused
-- 3 equalizer bars (`@keyframes eqBounce`) animate when playing
-- `.radio-btn.playing` class toggles visual state (accent border, animated bars, pulse stops)
-- Positioned in `.hero-bottom` between hero-info and hero-scroll
+- 16 bodies (8 original + 8 recolored SVGs) spawned above viewport
+- Mouse/touch drag interaction
+- Fixed timestep physics loop via requestAnimationFrame
 
 ### Navigation
-- Smooth scroll via `scrollIntoView({ behavior: 'smooth' })`
-- Mobile hamburger toggle (`.nav-links.open` class)
-- `nav-dark` class applied via IntersectionObserver on marquee and AI sections (switches blend mode to normal)
+- Smooth scroll via `scrollIntoView`
+- Mobile menu: CSS class toggle (`.nav-links.open`)
+- `nav-dark` class via IntersectionObserver on marquee/AI sections
 
-## Key JavaScript Functions
+## SEO & Meta
 
-| Function | Purpose |
-|----------|---------|
-| `animateFollower()` | Cursor follower animation loop |
-| `shiftColor(hex, amount)` | Shift hex color for modal hero |
-| `showFrame(idx)` | Render specific GIF frame to canvas |
-| `onScroll()` | Calculate and display scroll-synced GIF frame |
-| `init()` | Initialize Matter.js physics engine |
-| `cleanup()` | Destroy physics engine and remove bodies |
-| `updatePositions()` | Sync physics body positions to DOM elements |
+- `<meta name="description">` for search engines
+- Open Graph tags (`og:title`, `og:description`, `og:image`, `og:url`)
+- Twitter Card meta tags
+- `<link rel="icon">` using Logomark.svg
+- `<link rel="canonical">`
+- Matter.js CDN loaded with `defer` and `integrity` (SRI hash)
 
 ## Contact Info (Hardcoded)
 
 - Email: `cvhrsryldz96@gmail.com`
 - GitHub: `https://github.com/cvhrsryldz`
-- Social links: Behance, Instagram (in contact section)
+- Behance: `https://www.behance.net/cvhrsryldz`
+- Instagram: `https://www.instagram.com/cevherderler/`
 
 ## Development Notes
 
 ### Local Development
 ```bash
-# Option 1: Python HTTP server
 python3 -m http.server 8000
-
-# Option 2: Open directly
-open index.html
 ```
-A local HTTP server is recommended for proper CORS handling of assets (GIF fetch, SVG loading).
-
-### Content Updates
-1. Open `admin.html` in browser
-2. Edit sections via the form UI
-3. Click "Generate & Download" to get updated `index.html`
-4. Replace existing `index.html` with the downloaded version
+A local HTTP server is required for proper CORS handling of video/SVG assets.
 
 ### Important Caveats
-- **CSS/JS are minified inline** — edits to `index.html` styles require working with minified code
-- **Font files not in repo** — `fonts/` directory has only `.gitkeep`; Roc Grotesk WOFF2/WOFF files must be added separately
-- **Large media files** — `hero-video.mp4` (~24MB), `aboutme.gif` (9.3MB), and `around-the-world.mp3` (5.5MB) are committed to repo
+- **CSS/JS are inline** — edits require working directly in `index.html`
+- **Font files not in repo** — `fonts/` has only `.gitkeep`; Roc Grotesk files must be added separately
+- **Large media files** — hero-video.mp4 (~24MB), aboutme.mp4, around-the-world.mp3 are in repo
 - **No `.gitignore`** — all files are tracked
-- **Admin panel generates full HTML** — changes made directly to `index.html` may be overwritten if admin panel is used to regenerate
+- **Admin panel generates full HTML** — direct `index.html` edits may be overwritten by admin regeneration
 - **No testing framework** — manual browser testing only
-- **Gallery projects use color blocks** — no actual project images; visual differentiation is via CSS gradient backgrounds with `data-color` attributes
